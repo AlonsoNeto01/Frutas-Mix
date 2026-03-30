@@ -65,6 +65,7 @@ export interface StoreSettings {
   id: string;
   store_name: string;
   whatsapp_number: string | null;
+  logo_url: string | null;
   delivery_fee: number;
   created_at: string;
 }

@@ -62,6 +62,7 @@ CREATE TABLE store_settings (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   store_name TEXT NOT NULL DEFAULT 'LancheFlow',
   whatsapp_number TEXT,
+  logo_url TEXT,
   delivery_fee NUMERIC(10,2) DEFAULT 0,
   created_at TIMESTAMPTZ DEFAULT now()
 );

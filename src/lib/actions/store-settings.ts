@@ -19,6 +19,7 @@ export async function getStoreSettings() {
         id: '',
         store_name: 'LancheFlow',
         whatsapp_number: null,
+        logo_url: null,
         delivery_fee: 0,
         created_at: '',
       },
@@ -28,28 +29,47 @@ export async function getStoreSettings() {
   return { data, error: null };
 }
 
-export async function updateStoreSettings(settings: {
-  id: string;
-  store_name: string;
-  whatsapp_number: string | null;
-  delivery_fee: number;
-}) {
+export async function updateStoreSettings(formData: FormData) {
   const supabase = await createClient();
+
+  const id = formData.get('id') as string;
+  const store_name = formData.get('store_name') as string;
+  const whatsapp_number = formData.get('whatsapp_number') as string;
+  const delivery_fee = parseFloat(formData.get('delivery_fee') as string) || 0;
+  const logoFile = formData.get('logo') as File | null;
+
+  const updateData: Record<string, unknown> = {
+    store_name,
+    whatsapp_number: whatsapp_number || null,
+    delivery_fee,
+  };
+
+  // Upload do logo se fornecido
+  if (logoFile && logoFile.size > 0) {
+    const ext = logoFile.name.split('.').pop();
+    const fileName = `logo-${Date.now()}.${ext}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from('images')
+      .upload(fileName, logoFile, { upsert: true });
+
+    if (uploadError) {
+      return { error: `Erro no upload do logo: ${uploadError.message}` };
+    }
+
+    updateData.logo_url = fileName;
+  }
 
   const { error } = await supabase
     .from('store_settings')
-    .update({
-      store_name: settings.store_name,
-      whatsapp_number: settings.whatsapp_number,
-      delivery_fee: settings.delivery_fee,
-    })
-    .eq('id', settings.id);
+    .update(updateData)
+    .eq('id', id);
 
   if (error) {
     return { error: error.message };
   }
 
-  revalidatePath('/');
+  revalidatePath('/', 'layout');
   revalidatePath('/checkout');
   revalidatePath('/admin');
   return { success: true };

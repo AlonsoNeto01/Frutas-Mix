@@ -4,6 +4,9 @@ import './globals.css';
 import './print.css';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import { CartProvider } from '@/contexts/CartContext';
+import { StoreProvider } from '@/contexts/StoreContext';
+import { getStoreSettings } from '@/lib/actions/store-settings';
+import type { StoreSettings } from '@/lib/types';
 
 const inter = Inter({
   variable: '--font-inter',
@@ -16,17 +19,22 @@ export const metadata: Metadata = {
   keywords: ['delivery', 'lanches', 'hambúrguer', 'pedido online', 'entrega'],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const settingsResult = await getStoreSettings();
+  const settings = settingsResult.data as StoreSettings | null;
+
   return (
     <html lang="pt-BR" className={`${inter.variable} h-full`} suppressHydrationWarning>
       <body className="min-h-full flex flex-col font-[var(--font-inter)] antialiased">
         <ThemeProvider>
           <CartProvider>
-            {children}
+            <StoreProvider settings={settings}>
+              {children}
+            </StoreProvider>
           </CartProvider>
         </ThemeProvider>
       </body>

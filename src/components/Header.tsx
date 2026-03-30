@@ -1,14 +1,20 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useCart } from '@/contexts/CartContext';
+import { useStore } from '@/contexts/StoreContext';
+import { getSupabaseImageUrl } from '@/lib/utils';
 import ThemeToggle from './ThemeToggle';
 import { useState } from 'react';
 import Cart from './Cart';
 
 export default function Header() {
   const { itemCount } = useCart();
+  const { storeName, logoUrl } = useStore();
   const [cartOpen, setCartOpen] = useState(false);
+
+  const resolvedLogoUrl = logoUrl ? getSupabaseImageUrl(logoUrl) : null;
 
   return (
     <>
@@ -17,11 +23,21 @@ export default function Header() {
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2.5 group" id="logo-link">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center shadow-lg shadow-orange-500/20 group-hover:shadow-orange-500/40 transition-shadow">
-                <span className="text-white text-lg font-bold">🍔</span>
-              </div>
+              {resolvedLogoUrl ? (
+                <Image
+                  src={resolvedLogoUrl}
+                  alt={storeName}
+                  width={36}
+                  height={36}
+                  className="w-9 h-9 rounded-xl object-cover shadow-lg"
+                />
+              ) : (
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center shadow-lg shadow-orange-500/20 group-hover:shadow-orange-500/40 transition-shadow">
+                  <span className="text-white text-lg font-bold">🍔</span>
+                </div>
+              )}
               <span className="text-xl font-bold bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">
-                LancheFlow
+                {storeName}
               </span>
             </Link>
 
