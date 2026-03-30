@@ -61,6 +61,14 @@ export interface CartItem {
   observation: string;
 }
 
+export interface StoreSettings {
+  id: string;
+  store_name: string;
+  whatsapp_number: string | null;
+  delivery_fee: number;
+  created_at: string;
+}
+
 // Helpers para status labels
 export const ORDER_STATUS_LABELS: Record<OrderStatus, string> = {
   novo: 'Novo',

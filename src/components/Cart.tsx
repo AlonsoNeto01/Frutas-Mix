@@ -102,11 +102,14 @@ export default function Cart({ isOpen, onClose }: CartProps) {
         {items.length > 0 && (
           <div className="border-t border-gray-100 dark:border-neutral-800 p-5 space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600 dark:text-gray-400">Total</span>
+              <span className="text-sm text-gray-600 dark:text-gray-400">Subtotal</span>
               <span className="text-xl font-bold text-gray-900 dark:text-gray-100">
                 {formatCurrency(total)}
               </span>
             </div>
+            <p className="text-xs text-gray-400 dark:text-gray-500 flex items-center gap-1">
+              🛵 Taxa de entrega calculada no checkout
+            </p>
             <Button onClick={handleCheckout} className="w-full" size="lg" id="go-to-checkout-btn">
               Ir para Checkout
             </Button>

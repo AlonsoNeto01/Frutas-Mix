@@ -57,6 +57,15 @@ CREATE TABLE order_items (
   observation TEXT
 );
 
+-- Configurações da loja
+CREATE TABLE store_settings (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  store_name TEXT NOT NULL DEFAULT 'LancheFlow',
+  whatsapp_number TEXT,
+  delivery_fee NUMERIC(10,2) DEFAULT 0,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
 -- ============================================
 -- Seed: Inserir os 7 dias da semana
 -- ============================================
@@ -78,6 +87,9 @@ INSERT INTO categories (name, sort_order) VALUES
   ('🍟 Porções', 4),
   ('🥤 Bebidas', 5),
   ('🍰 Sobremesas', 6);
+
+-- Seed: Configurações padrão
+INSERT INTO store_settings (store_name) VALUES ('LancheFlow');
 
 -- ============================================
 -- RLS Policies
@@ -109,3 +121,8 @@ CREATE POLICY "Admin read order_items" ON order_items FOR SELECT TO authenticate
 
 -- Habilitar Realtime para pedidos
 ALTER PUBLICATION supabase_realtime ADD TABLE orders;
+
+-- Store settings RLS
+ALTER TABLE store_settings ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Public read store_settings" ON store_settings FOR SELECT USING (true);
+CREATE POLICY "Admin full access store_settings" ON store_settings FOR ALL TO authenticated USING (true) WITH CHECK (true);

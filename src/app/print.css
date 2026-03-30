@@ -1,0 +1,32 @@
+/* ============================================
+   LancheFlow — Print Styles
+   ============================================ */
+
+@media print {
+  /* Esconder tudo exceto a comanda */
+  body > *:not(#print-area) {
+    display: none !important;
+  }
+
+  #print-area {
+    display: block !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 80mm;
+    background: white;
+    color: black;
+    z-index: 99999;
+  }
+
+  /* Reset para impressão */
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  @page {
+    size: 80mm auto;
+    margin: 0;
+  }
+}

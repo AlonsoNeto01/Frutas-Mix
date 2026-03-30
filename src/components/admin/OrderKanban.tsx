@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import type { Order, OrderStatus } from '@/lib/types';
 import { ORDER_STATUS_LABELS } from '@/lib/types';
 import { updateOrderStatus } from '@/lib/actions/orders';
@@ -25,8 +25,83 @@ const NEXT_STATUS: Record<OrderStatus, OrderStatus | null> = {
   concluido: null,
 };
 
+// Gera um bipe de notificação via Web Audio API
+function playNotificationSound() {
+  try {
+    const audioCtx = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
+
+    // Tom 1 - nota alta
+    const osc1 = audioCtx.createOscillator();
+    const gain1 = audioCtx.createGain();
+    osc1.type = 'sine';
+    osc1.frequency.setValueAtTime(880, audioCtx.currentTime);
+    gain1.gain.setValueAtTime(0.3, audioCtx.currentTime);
+    gain1.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+    osc1.connect(gain1);
+    gain1.connect(audioCtx.destination);
+    osc1.start(audioCtx.currentTime);
+    osc1.stop(audioCtx.currentTime + 0.3);
+
+    // Tom 2 - nota mais alta (depois de 0.15s)
+    const osc2 = audioCtx.createOscillator();
+    const gain2 = audioCtx.createGain();
+    osc2.type = 'sine';
+    osc2.frequency.setValueAtTime(1100, audioCtx.currentTime + 0.15);
+    gain2.gain.setValueAtTime(0.01, audioCtx.currentTime);
+    gain2.gain.setValueAtTime(0.3, audioCtx.currentTime + 0.15);
+    gain2.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+    osc2.connect(gain2);
+    gain2.connect(audioCtx.destination);
+    osc2.start(audioCtx.currentTime + 0.15);
+    osc2.stop(audioCtx.currentTime + 0.5);
+
+    // Tom 3 - nota mais alta ainda (depois de 0.3s)
+    const osc3 = audioCtx.createOscillator();
+    const gain3 = audioCtx.createGain();
+    osc3.type = 'sine';
+    osc3.frequency.setValueAtTime(1320, audioCtx.currentTime + 0.3);
+    gain3.gain.setValueAtTime(0.01, audioCtx.currentTime);
+    gain3.gain.setValueAtTime(0.35, audioCtx.currentTime + 0.3);
+    gain3.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.6);
+    osc3.connect(gain3);
+    gain3.connect(audioCtx.destination);
+    osc3.start(audioCtx.currentTime + 0.3);
+    osc3.stop(audioCtx.currentTime + 0.6);
+  } catch {
+    // Fallback silencioso se Web Audio não estiver disponível
+  }
+}
+
+function sendBrowserNotification(order: Order) {
+  if ('Notification' in window && Notification.permission === 'granted') {
+    const itemsList = order.order_items
+      ?.map((item) => `${item.quantity}x ${item.product_name}`)
+      .join(', ') || 'Itens do pedido';
+
+    new Notification('🍔 Novo pedido!', {
+      body: `${order.customer_name} — ${itemsList}`,
+      icon: '/favicon.ico',
+      tag: `order-${order.id}`,
+    });
+  }
+}
+
 export default function OrderKanban({ initialOrders }: OrderKanbanProps) {
   const [orders, setOrders] = useState<Order[]>(initialOrders);
+  const [newOrderPulse, setNewOrderPulse] = useState(false);
+  const hasInteracted = useRef(false);
+
+  // Solicitar permissão de notificação
+  useEffect(() => {
+    if ('Notification' in window && Notification.permission === 'default') {
+      Notification.requestPermission();
+    }
+
+    // Marcar interação do usuário (necessário para Web Audio)
+    const handleInteraction = () => { hasInteracted.current = true; };
+    window.addEventListener('click', handleInteraction, { once: true });
+    return () => window.removeEventListener('click', handleInteraction);
+  }, []);
 
   // Realtime subscription
   useEffect(() => {
@@ -46,7 +121,18 @@ export default function OrderKanban({ initialOrders }: OrderKanbanProps) {
             .single();
 
           if (data) {
-            setOrders((prev) => [data as Order, ...prev]);
+            const newOrder = data as Order;
+            setOrders((prev) => [newOrder, ...prev]);
+
+            // 🔔 Tocar som e enviar notificação
+            if (hasInteracted.current) {
+              playNotificationSound();
+            }
+            sendBrowserNotification(newOrder);
+
+            // Animação de pulse
+            setNewOrderPulse(true);
+            setTimeout(() => setNewOrderPulse(false), 2000);
           }
         }
       )
@@ -90,6 +176,7 @@ export default function OrderKanban({ initialOrders }: OrderKanbanProps) {
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
       {COLUMNS.map(({ status, color, borderColor }) => {
         const columnOrders = orders.filter((o) => o.status === status);
+        const isNovoColumn = status === 'novo';
 
         return (
           <div key={status} className="flex flex-col">
@@ -98,7 +185,11 @@ export default function OrderKanban({ initialOrders }: OrderKanbanProps) {
               <h3 className="font-bold text-sm text-gray-900 dark:text-gray-100">
                 {ORDER_STATUS_LABELS[status]}
               </h3>
-              <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 bg-white dark:bg-neutral-900 px-2 py-0.5 rounded-full">
+              <span className={`text-xs font-semibold text-gray-500 dark:text-gray-400 bg-white dark:bg-neutral-900 px-2 py-0.5 rounded-full transition-all ${
+                isNovoColumn && newOrderPulse
+                  ? 'animate-pulse ring-2 ring-red-500 bg-red-50 dark:bg-red-500/20 text-red-600 dark:text-red-400'
+                  : ''
+              }`}>
                 {columnOrders.length}
               </span>
             </div>

@@ -1,4 +1,5 @@
 import { checkStoreOpen } from '@/lib/actions/business-hours';
+import { getStoreSettings } from '@/lib/actions/store-settings';
 import Header from '@/components/Header';
 import CheckoutForm from '@/components/CheckoutForm';
 import type { Metadata } from 'next';
@@ -9,7 +10,12 @@ export const metadata: Metadata = {
 };
 
 export default async function CheckoutPage() {
-  const storeStatus = await checkStoreOpen();
+  const [storeStatus, settingsResult] = await Promise.all([
+    checkStoreOpen(),
+    getStoreSettings(),
+  ]);
+
+  const settings = settingsResult.data;
 
   return (
     <>
@@ -18,7 +24,11 @@ export default async function CheckoutPage() {
         <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">
           Finalizar Pedido
         </h1>
-        <CheckoutForm isStoreOpen={storeStatus.isOpen} />
+        <CheckoutForm
+          isStoreOpen={storeStatus.isOpen}
+          deliveryFee={settings.delivery_fee ?? 0}
+          whatsappNumber={settings.whatsapp_number ?? null}
+        />
       </main>
     </>
   );
