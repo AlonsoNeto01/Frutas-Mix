@@ -8,8 +8,6 @@ import { StoreProvider } from '@/contexts/StoreContext';
 import { getStoreSettings } from '@/lib/actions/store-settings';
 import type { StoreSettings } from '@/lib/types';
 
-export const runtime = 'edge';
-
 const inter = Inter({
   variable: '--font-inter',
   subsets: ['latin'],
