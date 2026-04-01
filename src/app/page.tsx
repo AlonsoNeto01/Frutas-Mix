@@ -6,6 +6,8 @@ import StoreStatusBanner from '@/components/StoreStatusBanner';
 import HomeClient from './HomeClient';
 import type { Category, Product } from '@/lib/types';
 
+export const runtime = 'edge';
+
 export default async function Home() {
   const [categoriesResult, productsResult, storeStatus] = await Promise.all([
     getCategories(),
