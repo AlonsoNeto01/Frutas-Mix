@@ -1,6 +1,6 @@
 'use client';
 
-import type { Order, Product, Category, BusinessHours, StoreSettings } from '@/lib/types';
+import type { Order, Product, Category, BusinessHours, StoreSettings, DeliveryNeighborhood } from '@/lib/types';
 import Tabs from '@/components/ui/Tabs';
 import OrderKanban from '@/components/admin/OrderKanban';
 import DashboardStats from '@/components/admin/DashboardStats';
