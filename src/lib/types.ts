@@ -24,6 +24,35 @@ export interface Product {
   created_at: string;
 }
 
+export interface AddonGroup {
+  id: string;
+  name: string;
+  is_mandatory: boolean;
+  max_choices: number;
+  product_id: string;
+  sort_order: number;
+  created_at: string;
+  items?: AddonItem[];
+}
+
+export interface AddonItem {
+  id: string;
+  addon_group_id: string;
+  name: string;
+  price: number;
+  is_active: boolean;
+  sort_order: number;
+  created_at: string;
+}
+
+export interface DeliveryNeighborhood {
+  id: string;
+  name: string;
+  fee: number;
+  is_active: boolean;
+  created_at: string;
+}
+
 export interface BusinessHours {
   id: string;
   day_of_week: number;
@@ -37,8 +66,10 @@ export interface Order {
   customer_name: string;
   customer_phone: string;
   address: string;
+  neighborhood: string | null;
   payment_method: PaymentMethod;
   change_for: number | null;
+  delivery_fee: number;
   total: number;
   status: OrderStatus;
   created_at: string;
@@ -53,12 +84,14 @@ export interface OrderItem {
   quantity: number;
   unit_price: number;
   observation: string | null;
+  addons?: any; // JSONB array of selected addons
 }
 
 export interface CartItem {
   product: Product;
   quantity: number;
   observation: string;
+  addons: AddonItem[];
 }
 
 export interface StoreSettings {

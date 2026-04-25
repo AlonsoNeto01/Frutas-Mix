@@ -7,6 +7,8 @@ import type { OrderStatus } from '@/lib/types';
 export async function createOrder(data: {
   customer_name: string;
   customer_phone: string;
+  neighborhood: string | null;
+  delivery_fee: number;
   address: string;
   payment_method: string;
   change_for: number | null;
@@ -27,6 +29,8 @@ export async function createOrder(data: {
     .insert({
       customer_name: data.customer_name,
       customer_phone: data.customer_phone,
+      neighborhood: data.neighborhood,
+      delivery_fee: data.delivery_fee,
       address: data.address,
       payment_method: data.payment_method,
       change_for: data.change_for,

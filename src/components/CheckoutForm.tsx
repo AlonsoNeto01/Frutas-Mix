@@ -9,13 +9,16 @@ import { buildWhatsAppMessage, getWhatsAppUrl } from '@/lib/whatsapp';
 import Button from './ui/Button';
 import Input from './ui/Input';
 
+import type { DeliveryNeighborhood } from '@/lib/types';
+
 interface CheckoutFormProps {
   isStoreOpen: boolean;
-  deliveryFee: number;
+  defaultDeliveryFee: number;
   whatsappNumber: string | null;
+  neighborhoods: DeliveryNeighborhood[];
 }
 
-export default function CheckoutForm({ isStoreOpen, deliveryFee, whatsappNumber }: CheckoutFormProps) {
+export default function CheckoutForm({ isStoreOpen, defaultDeliveryFee, whatsappNumber, neighborhoods }: CheckoutFormProps) {
   const { items, total: subtotal, clearCart } = useCart();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -24,16 +27,18 @@ export default function CheckoutForm({ isStoreOpen, deliveryFee, whatsappNumber 
   const [whatsappUrl, setWhatsappUrl] = useState('');
   const [orderId, setOrderId] = useState<string | null>(null);
 
+  const selectedNeighborhood = neighborhoods.find(n => n.id === formData.neighborhood_id);
+  const deliveryFee = selectedNeighborhood ? Number(selectedNeighborhood.fee) : Number(defaultDeliveryFee);
   const grandTotal = subtotal + deliveryFee;
 
   const [formData, setFormData] = useState(() => {
     if (typeof window !== 'undefined') {
       try {
         const saved = localStorage.getItem('lancheflow-customer');
-        if (saved) return { ...JSON.parse(saved), payment_method: 'pix', change_for: '' };
+        if (saved) return { ...JSON.parse(saved), payment_method: 'pix', change_for: '', neighborhood_id: '' };
       } catch { /* ignore */ }
     }
-    return { name: '', phone: '', address: '', payment_method: 'pix', change_for: '' };
+    return { name: '', phone: '', address: '', payment_method: 'pix', change_for: '', neighborhood_id: '' };
   });
 
   const handleChange = (field: string, value: string) => {
@@ -52,12 +57,14 @@ export default function CheckoutForm({ isStoreOpen, deliveryFee, whatsappNumber 
       // Salvar dados do cliente
       localStorage.setItem(
         'lancheflow-customer',
-        JSON.stringify({ name: formData.name, phone: formData.phone, address: formData.address })
+        JSON.stringify({ name: formData.name, phone: formData.phone, address: formData.address, neighborhood_id: formData.neighborhood_id })
       );
 
       const result = await createOrder({
         customer_name: formData.name,
         customer_phone: formData.phone,
+        neighborhood: selectedNeighborhood ? selectedNeighborhood.name : null,
+        delivery_fee: deliveryFee,
         address: formData.address,
         payment_method: formData.payment_method,
         change_for: formData.payment_method === 'dinheiro' && formData.change_for
@@ -238,10 +245,29 @@ export default function CheckoutForm({ isStoreOpen, deliveryFee, whatsappNumber 
           onChange={(e) => handleChange('phone', e.target.value)}
           required
         />
+        <div className="space-y-1">
+          <label htmlFor="neighborhood" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            Bairro (Taxa de Entrega)
+          </label>
+          <select
+            id="neighborhood"
+            value={formData.neighborhood_id}
+            onChange={(e) => handleChange('neighborhood_id', e.target.value)}
+            required
+            className="w-full px-4 py-3 bg-gray-50 dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all text-gray-900 dark:text-gray-100"
+          >
+            <option value="">Selecione seu bairro...</option>
+            {neighborhoods.filter(n => n.is_active).map(n => (
+              <option key={n.id} value={n.id}>
+                {n.name} — {formatCurrency(n.fee)}
+              </option>
+            ))}
+          </select>
+        </div>
         <Input
           id="customer-address"
-          label="Endereço de Entrega"
-          placeholder="Rua, número, bairro, complemento"
+          label="Endereço de Entrega (Rua, Número, Complemento)"
+          placeholder="Rua, número, complemento"
           value={formData.address}
           onChange={(e) => handleChange('address', e.target.value)}
           required

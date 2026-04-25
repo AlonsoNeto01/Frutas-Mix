@@ -32,6 +32,7 @@ export default function OrderReceipt({ order }: OrderReceiptProps) {
         <div><strong>Cliente:</strong> {order.customer_name}</div>
         <div><strong>Tel:</strong> {order.customer_phone}</div>
         <div><strong>End:</strong> {order.address}</div>
+        {order.neighborhood && <div><strong>Bairro:</strong> {order.neighborhood}</div>}
       </div>
 
       <div style={{ borderBottom: '1px dashed #000', margin: '8px 0' }} />
@@ -57,6 +58,10 @@ export default function OrderReceipt({ order }: OrderReceiptProps) {
       <div style={{ borderBottom: '1px dashed #000', margin: '8px 0' }} />
 
       {/* Total */}
+      <div style={{ marginBottom: '4px', fontSize: '11px', display: 'flex', justifyContent: 'space-between' }}>
+        <span>Taxa de Entrega:</span>
+        <span>{formatCurrency(order.delivery_fee || 0)}</span>
+      </div>
       <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 'bold', fontSize: '14px' }}>
         <span>TOTAL:</span>
         <span>{formatCurrency(order.total)}</span>

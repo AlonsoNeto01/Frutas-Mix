@@ -7,6 +7,7 @@ import DashboardStats from '@/components/admin/DashboardStats';
 import ProductTable from '@/components/admin/ProductTable';
 import BusinessHoursForm from '@/components/admin/BusinessHoursForm';
 import StoreSettingsForm from '@/components/admin/StoreSettingsForm';
+import NeighborhoodSettings from '@/components/admin/NeighborhoodSettings';
 
 interface AdminPageClientProps {
   initialOrders: Order[];
@@ -14,6 +15,7 @@ interface AdminPageClientProps {
   initialCategories: Category[];
   initialHours: BusinessHours[];
   initialSettings: StoreSettings;
+  initialNeighborhoods: DeliveryNeighborhood[];
 }
 
 export default function AdminPageClient({
@@ -22,6 +24,7 @@ export default function AdminPageClient({
   initialCategories,
   initialHours,
   initialSettings,
+  initialNeighborhoods,
 }: AdminPageClientProps) {
   return (
     <Tabs
@@ -79,6 +82,7 @@ export default function AdminPageClient({
           content: (
             <div className="space-y-8">
               <StoreSettingsForm initialSettings={initialSettings} />
+              <NeighborhoodSettings initialNeighborhoods={initialNeighborhoods} />
             </div>
           ),
         },

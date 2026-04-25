@@ -1,5 +1,6 @@
 import { checkStoreOpen } from '@/lib/actions/business-hours';
 import { getStoreSettings } from '@/lib/actions/store-settings';
+import { getNeighborhoods } from '@/lib/actions/neighborhoods';
 import Header from '@/components/Header';
 import CheckoutForm from '@/components/CheckoutForm';
 import type { Metadata } from 'next';
@@ -10,12 +11,14 @@ export const metadata: Metadata = {
 };
 
 export default async function CheckoutPage() {
-  const [storeStatus, settingsResult] = await Promise.all([
+  const [storeStatus, settingsResult, neighborhoodsResult] = await Promise.all([
     checkStoreOpen(),
     getStoreSettings(),
+    getNeighborhoods(),
   ]);
 
   const settings = settingsResult.data;
+  const neighborhoods = neighborhoodsResult.data || [];
 
   return (
     <>
@@ -26,8 +29,9 @@ export default async function CheckoutPage() {
         </h1>
         <CheckoutForm
           isStoreOpen={storeStatus.isOpen}
-          deliveryFee={settings.delivery_fee ?? 0}
+          defaultDeliveryFee={settings.delivery_fee ?? 0}
           whatsappNumber={settings.whatsapp_number ?? null}
+          neighborhoods={neighborhoods}
         />
       </main>
     </>

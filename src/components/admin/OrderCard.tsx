@@ -56,9 +56,16 @@ export default function OrderCard({ order, onAdvance, nextStatus, onDelete }: Or
         </div>
 
         {/* Endereço */}
-        <p className="text-xs text-gray-600 dark:text-gray-400 mb-3 bg-gray-50 dark:bg-neutral-800 rounded-lg p-2">
-          📍 {order.address}
-        </p>
+        <div className="bg-gray-50 dark:bg-neutral-800 rounded-lg p-2 mb-3">
+          <p className="text-xs text-gray-600 dark:text-gray-400">
+            📍 {order.address}
+          </p>
+          {order.neighborhood && (
+            <p className="text-xs font-semibold text-orange-600 dark:text-orange-400 mt-1 ml-4">
+              Bairro: {order.neighborhood}
+            </p>
+          )}
+        </div>
 
         {/* Items */}
         {order.order_items && order.order_items.length > 0 && (
@@ -83,6 +90,9 @@ export default function OrderCard({ order, onAdvance, nextStatus, onDelete }: Or
           <div>
             <p className="text-sm font-bold text-orange-600 dark:text-orange-400">
               {formatCurrency(order.total)}
+            </p>
+            <p className="text-[10px] text-gray-400 dark:text-gray-500">
+              Entrega: {formatCurrency(order.delivery_fee || 0)}
             </p>
             <p className="text-[10px] text-gray-400 dark:text-gray-500">
               {PAYMENT_METHOD_LABELS[order.payment_method]}
