@@ -167,14 +167,14 @@ export default function ProductTable({ initialProducts, initialCategories }: Pro
                     </td>
                     <td className="py-3 px-2 text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <Button size="sm" variant="outline" onClick={() => { setEditProduct(product); setShowForm(true); }}>
+                        <Button size="sm" variant="secondary" onClick={() => { setEditProduct(product); setShowForm(true); }}>
                           Editar
                         </Button>
                         <Button 
                           size="sm" 
-                          variant="outline" 
+                          variant="secondary" 
                           onClick={() => setAddonsProduct(product)}
-                          className="text-orange-600 border-orange-600 hover:bg-orange-50 dark:text-orange-400 dark:border-orange-400 dark:hover:bg-orange-500/10"
+                          className="text-orange-600 border border-orange-600 hover:bg-orange-50 dark:text-orange-400 dark:border-orange-400 dark:hover:bg-orange-500/10"
                         >
                           ➕ Adicionais
                         </Button>
