@@ -27,10 +27,6 @@ export default function CheckoutForm({ isStoreOpen, defaultDeliveryFee, whatsapp
   const [whatsappUrl, setWhatsappUrl] = useState('');
   const [orderId, setOrderId] = useState<string | null>(null);
 
-  const selectedNeighborhood = neighborhoods.find(n => n.id === formData.neighborhood_id);
-  const deliveryFee = selectedNeighborhood ? Number(selectedNeighborhood.fee) : Number(defaultDeliveryFee);
-  const grandTotal = subtotal + deliveryFee;
-
   const [formData, setFormData] = useState(() => {
     if (typeof window !== 'undefined') {
       try {
@@ -40,6 +36,10 @@ export default function CheckoutForm({ isStoreOpen, defaultDeliveryFee, whatsapp
     }
     return { name: '', phone: '', address: '', payment_method: 'pix', change_for: '', neighborhood_id: '' };
   });
+
+  const selectedNeighborhood = neighborhoods.find(n => n.id === formData.neighborhood_id);
+  const deliveryFee = selectedNeighborhood ? Number(selectedNeighborhood.fee) : Number(defaultDeliveryFee);
+  const grandTotal = subtotal + deliveryFee;
 
   const handleChange = (field: string, value: string) => {
     setFormData((prev: typeof formData) => ({ ...prev, [field]: value }));
