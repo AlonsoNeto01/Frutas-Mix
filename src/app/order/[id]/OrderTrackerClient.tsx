@@ -59,14 +59,17 @@ export default function OrderTrackerClient({ initialOrder }: OrderTrackerClientP
           filter: `id=eq.${order.id}`,
         },
         (payload) => {
-          const newOrder = { ...prev, ...payload.new };
-          
-          // Clear active order from localStorage if completed
-          if (newOrder.status === 'concluido') {
-            localStorage.removeItem('lancheflow-active-order');
-          }
-          
-          return newOrder;
+          setOrder((prev) => {
+            const newOrder = { ...prev, ...payload.new } as Order;
+            
+            // Clear active order from localStorage if completed
+            if (newOrder.status === 'concluido') {
+              localStorage.removeItem('lancheflow-active-order');
+              window.dispatchEvent(new Event('lancheflow-order-update'));
+            }
+            
+            return newOrder;
+          });
         }
       )
       .subscribe();
