@@ -13,7 +13,7 @@ import type { CartItem, Product } from '@/lib/types';
 // Actions
 // ============================================
 type CartAction =
-  | { type: 'ADD_ITEM'; product: Product; quantity: number; observation: string }
+  | { type: 'ADD_ITEM'; product: Product; quantity: number; observation: string; addons: import('@/lib/types').AddonItem[] }
   | { type: 'REMOVE_ITEM'; index: number }
   | { type: 'UPDATE_QUANTITY'; index: number; quantity: number }
   | { type: 'CLEAR_CART' }
@@ -29,7 +29,10 @@ interface CartState {
 }
 
 function calculateTotal(items: CartItem[]): number {
-  return items.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+  return items.reduce((sum, item) => {
+    const addonsTotal = item.addons?.reduce((s, addon) => s + Number(addon.price), 0) || 0;
+    return sum + (Number(item.product.price) + addonsTotal) * item.quantity;
+  }, 0);
 }
 
 function calculateItemCount(items: CartItem[]): number {
@@ -39,11 +42,15 @@ function calculateItemCount(items: CartItem[]): number {
 function cartReducer(state: CartState, action: CartAction): CartState {
   switch (action.type) {
     case 'ADD_ITEM': {
-      // Verifica se o item já existe com a mesma observação
+      // Verifica se o item já existe com a mesma observação e mesmos adicionais
+      const newAddonsIds = action.addons.map(a => a.id).sort().join(',');
       const existingIndex = state.items.findIndex(
-        (item) =>
-          item.product.id === action.product.id &&
-          item.observation === action.observation
+        (item) => {
+          const itemAddonsIds = (item.addons || []).map(a => a.id).sort().join(',');
+          return item.product.id === action.product.id &&
+                 item.observation === action.observation &&
+                 itemAddonsIds === newAddonsIds;
+        }
       );
 
       let newItems: CartItem[];
@@ -60,6 +67,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
             product: action.product,
             quantity: action.quantity,
             observation: action.observation,
+            addons: action.addons,
           },
         ];
       }
@@ -121,7 +129,7 @@ interface CartContextType {
   items: CartItem[];
   total: number;
   itemCount: number;
-  addItem: (product: Product, quantity: number, observation: string) => void;
+  addItem: (product: Product, quantity: number, observation: string, addons: import('@/lib/types').AddonItem[]) => void;
   removeItem: (index: number) => void;
   updateQuantity: (index: number, quantity: number) => void;
   clearCart: () => void;
@@ -158,8 +166,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   }, [state.items]);
 
-  const addItem = (product: Product, quantity: number, observation: string) => {
-    dispatch({ type: 'ADD_ITEM', product, quantity, observation });
+  const addItem = (product: Product, quantity: number, observation: string, addons: import('@/lib/types').AddonItem[] = []) => {
+    dispatch({ type: 'ADD_ITEM', product, quantity, observation, addons });
   };
 
   const removeItem = (index: number) => {

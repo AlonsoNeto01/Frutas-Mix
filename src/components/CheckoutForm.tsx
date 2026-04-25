@@ -71,13 +71,17 @@ export default function CheckoutForm({ isStoreOpen, defaultDeliveryFee, whatsapp
           ? parseFloat(formData.change_for)
           : null,
         total: grandTotal,
-        items: items.map((item) => ({
-          product_id: item.product.id,
-          product_name: item.product.name,
-          quantity: item.quantity,
-          unit_price: item.product.price,
-          observation: item.observation || null,
-        })),
+        items: items.map((item) => {
+          const addonsTotal = item.addons?.reduce((sum, a) => sum + Number(a.price), 0) || 0;
+          return {
+            product_id: item.product.id,
+            product_name: item.product.name,
+            quantity: item.quantity,
+            unit_price: Number(item.product.price) + addonsTotal,
+            observation: item.observation || null,
+            addons: item.addons || [],
+          };
+        }),
       });
 
       if (result.error) {
@@ -186,21 +190,33 @@ export default function CheckoutForm({ isStoreOpen, defaultDeliveryFee, whatsapp
       <div className="bg-white dark:bg-neutral-900 rounded-2xl border border-gray-100 dark:border-neutral-800 p-5">
         <h3 className="font-bold text-gray-900 dark:text-gray-100 mb-4">📋 Resumo do Pedido</h3>
         <div className="space-y-3">
-          {items.map((item, i) => (
-            <div key={i} className="flex justify-between items-start text-sm">
-              <div>
-                <span className="font-medium text-gray-900 dark:text-gray-100">
-                  {item.quantity}x {item.product.name}
+          {items.map((item, i) => {
+            const addonsTotal = item.addons?.reduce((sum, a) => sum + Number(a.price), 0) || 0;
+            const itemTotal = (Number(item.product.price) + addonsTotal) * item.quantity;
+            
+            return (
+              <div key={i} className="flex justify-between items-start text-sm">
+                <div>
+                  <span className="font-medium text-gray-900 dark:text-gray-100">
+                    {item.quantity}x {item.product.name}
+                  </span>
+                  {item.addons && item.addons.length > 0 && (
+                    <div className="text-xs text-gray-500 mt-1 pl-2 border-l-2 border-gray-200 dark:border-neutral-700">
+                      {item.addons.map(a => (
+                        <div key={a.id}>+ {a.name}</div>
+                      ))}
+                    </div>
+                  )}
+                  {item.observation && (
+                    <p className="text-xs text-gray-400 mt-0.5">📝 {item.observation}</p>
+                  )}
+                </div>
+                <span className="font-semibold text-gray-900 dark:text-gray-100 whitespace-nowrap ml-4">
+                  {formatCurrency(itemTotal)}
                 </span>
-                {item.observation && (
-                  <p className="text-xs text-gray-400 mt-0.5">📝 {item.observation}</p>
-                )}
               </div>
-              <span className="font-semibold text-gray-900 dark:text-gray-100 whitespace-nowrap ml-4">
-                {formatCurrency(item.product.price * item.quantity)}
-              </span>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         <div className="mt-4 pt-4 border-t border-gray-100 dark:border-neutral-800 space-y-2">

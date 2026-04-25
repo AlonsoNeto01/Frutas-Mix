@@ -72,13 +72,20 @@ export default function OrderCard({ order, onAdvance, nextStatus, onDelete }: Or
           <div className="space-y-1.5 mb-3">
             {order.order_items.map((item) => (
               <div key={item.id} className="text-xs">
-                <span className="text-gray-900 dark:text-gray-100 font-medium">
+                <div className="text-gray-900 dark:text-gray-100 font-medium">
                   {item.quantity}x {item.product_name}
-                </span>
+                </div>
+                {item.addons && Array.isArray(item.addons) && item.addons.length > 0 && (
+                  <div className="text-gray-500 dark:text-gray-400 ml-3 border-l border-gray-200 dark:border-neutral-700 pl-2 mt-0.5">
+                    {item.addons.map((a: any, i: number) => (
+                      <div key={i}>+ {a.name}</div>
+                    ))}
+                  </div>
+                )}
                 {item.observation && (
-                  <span className="text-gray-400 dark:text-gray-500 ml-1">
+                  <div className="text-gray-400 dark:text-gray-500 ml-1 italic mt-0.5">
                     — {item.observation}
-                  </span>
+                  </div>
                 )}
               </div>
             ))}

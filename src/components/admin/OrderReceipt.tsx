@@ -46,8 +46,15 @@ export default function OrderReceipt({ order }: OrderReceiptProps) {
               <span>{item.quantity}x {item.product_name}</span>
               <span>{formatCurrency(item.unit_price * item.quantity)}</span>
             </div>
+            {item.addons && Array.isArray(item.addons) && item.addons.length > 0 && (
+              <div style={{ fontSize: '10px', paddingLeft: '8px' }}>
+                {item.addons.map((a: any, i: number) => (
+                  <div key={i}>+ {a.name}</div>
+                ))}
+              </div>
+            )}
             {item.observation && (
-              <div style={{ fontSize: '10px', paddingLeft: '12px', fontStyle: 'italic' }}>
+              <div style={{ fontSize: '10px', paddingLeft: '8px', fontStyle: 'italic' }}>
                 OBS: {item.observation}
               </div>
             )}

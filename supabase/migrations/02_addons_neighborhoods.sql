@@ -47,7 +47,7 @@ CREATE POLICY "Admin full access delivery_neighborhoods" ON delivery_neighborhoo
 CREATE POLICY "Admin full access addon_groups" ON addon_groups FOR ALL TO authenticated USING (true) WITH CHECK (true);
 CREATE POLICY "Admin full access addon_items" ON addon_items FOR ALL TO authenticated USING (true) WITH CHECK (true);
 
--- Inserir os bairros de Macapá / áreas especificadas
+-- Inserir os bairros de Oriximiná / áreas especificadas
 INSERT INTO delivery_neighborhoods (name, fee) VALUES 
 ('Centro', 5.00),
 ('Cidade Nova', 5.00),

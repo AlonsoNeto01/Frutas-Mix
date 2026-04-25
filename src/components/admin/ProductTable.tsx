@@ -10,6 +10,7 @@ import Modal from '../ui/Modal';
 import Button from '../ui/Button';
 import Input from '../ui/Input';
 import Image from 'next/image';
+import AddonsModal from './AddonsModal';
 
 interface ProductTableProps {
   initialProducts: Product[];
@@ -21,6 +22,7 @@ export default function ProductTable({ initialProducts, initialCategories }: Pro
   const [categories, setCategories] = useState(initialCategories);
   const [showForm, setShowForm] = useState(false);
   const [editProduct, setEditProduct] = useState<Product | null>(null);
+  const [addonsProduct, setAddonsProduct] = useState<Product | null>(null);
   const [newCategory, setNewCategory] = useState('');
   const [catLoading, setCatLoading] = useState(false);
 
@@ -165,18 +167,20 @@ export default function ProductTable({ initialProducts, initialCategories }: Pro
                     </td>
                     <td className="py-3 px-2 text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <button
-                          onClick={() => { setEditProduct(product); setShowForm(true); }}
-                          className="px-3 py-1.5 text-xs font-semibold text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-500/10 rounded-lg transition-colors"
-                        >
+                        <Button size="sm" variant="outline" onClick={() => { setEditProduct(product); setShowForm(true); }}>
                           Editar
-                        </button>
-                        <button
-                          onClick={() => handleDelete(product.id)}
-                          className="px-3 py-1.5 text-xs font-semibold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors"
+                        </Button>
+                        <Button 
+                          size="sm" 
+                          variant="outline" 
+                          onClick={() => setAddonsProduct(product)}
+                          className="text-orange-600 border-orange-600 hover:bg-orange-50 dark:text-orange-400 dark:border-orange-400 dark:hover:bg-orange-500/10"
                         >
+                          ➕ Adicionais
+                        </Button>
+                        <Button size="sm" variant="ghost" onClick={() => handleDelete(product.id)} className="text-red-600">
                           Excluir
-                        </button>
+                        </Button>
                       </div>
                     </td>
                   </tr>
@@ -206,6 +210,14 @@ export default function ProductTable({ initialProducts, initialCategories }: Pro
           onCancel={() => { setShowForm(false); setEditProduct(null); }}
         />
       </Modal>
+
+      {/* Addons Modal */}
+      {addonsProduct && (
+        <AddonsModal
+          product={addonsProduct}
+          onClose={() => setAddonsProduct(null)}
+        />
+      )}
     </div>
   );
 }

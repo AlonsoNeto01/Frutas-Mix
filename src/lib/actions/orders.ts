@@ -19,6 +19,7 @@ export async function createOrder(data: {
     quantity: number;
     unit_price: number;
     observation: string | null;
+    addons?: any[];
   }[];
 }) {
   const supabase = await createClient();
@@ -52,6 +53,7 @@ export async function createOrder(data: {
     quantity: item.quantity,
     unit_price: item.unit_price,
     observation: item.observation,
+    addons: item.addons || [],
   }));
 
   const { error: itemsError } = await supabase
