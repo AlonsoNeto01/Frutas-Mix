@@ -1,20 +1,23 @@
 import { getCategories } from '@/lib/actions/categories';
 import { getActiveProducts } from '@/lib/actions/products';
 import { checkStoreOpen } from '@/lib/actions/business-hours';
+import { getStoreSettings } from '@/lib/actions/store-settings';
 import Header from '@/components/Header';
 import StoreStatusBanner from '@/components/StoreStatusBanner';
 import HomeClient from './HomeClient';
 import type { Category, Product } from '@/lib/types';
 
 export default async function Home() {
-  const [categoriesResult, productsResult, storeStatus] = await Promise.all([
+  const [categoriesResult, productsResult, storeStatus, settingsResult] = await Promise.all([
     getCategories(),
     getActiveProducts(),
     checkStoreOpen(),
+    getStoreSettings(),
   ]);
 
   const categories = (categoriesResult.data || []) as Category[];
   const products = (productsResult.data || []) as Product[];
+  const storeName = settingsResult.data?.store_name || 'LancheFlow';
 
   return (
     <>
@@ -31,7 +34,7 @@ export default async function Home() {
           <h1 className="text-4xl md:text-6xl font-black text-gray-900 dark:text-white tracking-tight mb-4">
             Bateu aquela fome? <br className="hidden md:block" />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-500">
-              Pede um LancheFlow.
+              Peça no {storeName}.
             </span>
           </h1>
           <p className="text-gray-600 dark:text-gray-400 text-lg md:text-xl max-w-2xl mx-auto">
@@ -81,7 +84,7 @@ export default async function Home() {
 
       {/* Footer */}
       <footer className="border-t border-gray-100 dark:border-neutral-800 py-6 text-center text-sm text-gray-400 dark:text-gray-500">
-        © {new Date().getFullYear()} LancheFlow · Feito com 🧡
+        © {new Date().getFullYear()} {storeName} · Feito com 🧡
       </footer>
     </>
   );
