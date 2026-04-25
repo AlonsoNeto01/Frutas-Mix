@@ -92,3 +92,19 @@ export async function getOrders() {
 
   return { data, error: null };
 }
+
+export async function getOrderById(orderId: string) {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from('orders')
+    .select('*, order_items(*)')
+    .eq('id', orderId)
+    .single();
+
+  if (error) {
+    return { error: error.message, data: null };
+  }
+
+  return { data, error: null };
+}
