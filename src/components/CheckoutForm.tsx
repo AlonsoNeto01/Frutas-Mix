@@ -97,6 +97,10 @@ export default function CheckoutForm({ isStoreOpen, deliveryFee, whatsappNumber 
       }
 
       setOrderId(result.orderId ?? null);
+      if (result.orderId) {
+        localStorage.setItem('lancheflow-active-order', result.orderId);
+      }
+      
       clearCart();
       setSuccess(true);
     } catch {

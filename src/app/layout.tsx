@@ -7,6 +7,7 @@ import { CartProvider } from '@/contexts/CartContext';
 import { StoreProvider } from '@/contexts/StoreContext';
 import { getStoreSettings } from '@/lib/actions/store-settings';
 import type { StoreSettings } from '@/lib/types';
+import ActiveOrderBanner from '@/components/ActiveOrderBanner';
 
 const inter = Inter({
   variable: '--font-inter',
@@ -34,6 +35,7 @@ export default async function RootLayout({
           <CartProvider>
             <StoreProvider settings={settings}>
               {children}
+              <ActiveOrderBanner />
             </StoreProvider>
           </CartProvider>
         </ThemeProvider>

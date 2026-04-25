@@ -42,6 +42,11 @@ export default function OrderTrackerClient({ initialOrder }: OrderTrackerClientP
   const supabase = createClient();
 
   useEffect(() => {
+    // If initially loaded as completed, clear it
+    if (order.status === 'concluido') {
+      localStorage.removeItem('lancheflow-active-order');
+    }
+
     // Setup realtime subscription
     const channel = supabase
       .channel(`order-${order.id}`)
@@ -54,10 +59,14 @@ export default function OrderTrackerClient({ initialOrder }: OrderTrackerClientP
           filter: `id=eq.${order.id}`,
         },
         (payload) => {
-          setOrder((prev) => ({
-            ...prev,
-            ...payload.new,
-          }));
+          const newOrder = { ...prev, ...payload.new };
+          
+          // Clear active order from localStorage if completed
+          if (newOrder.status === 'concluido') {
+            localStorage.removeItem('lancheflow-active-order');
+          }
+          
+          return newOrder;
         }
       )
       .subscribe();
