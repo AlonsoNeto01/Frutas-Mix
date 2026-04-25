@@ -17,8 +17,11 @@ export default function StoreSettingsForm({ initialSettings }: StoreSettingsForm
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [coverPreview, setCoverPreview] = useState<string | null>(null);
+  const logoInputRef = useRef<HTMLInputElement>(null);
+  const coverInputRef = useRef<HTMLInputElement>(null);
   const logoFileRef = useRef<File | null>(null);
+  const coverFileRef = useRef<File | null>(null);
 
   const handleChange = (field: string, value: string) => {
     setSettings((prev) => ({ ...prev, [field]: value }));
@@ -28,8 +31,15 @@ export default function StoreSettingsForm({ initialSettings }: StoreSettingsForm
     const file = e.target.files?.[0];
     if (file) {
       logoFileRef.current = file;
-      const url = URL.createObjectURL(file);
-      setLogoPreview(url);
+      setLogoPreview(URL.createObjectURL(file));
+    }
+  };
+
+  const handleCoverChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      coverFileRef.current = file;
+      setCoverPreview(URL.createObjectURL(file));
     }
   };
 
@@ -46,6 +56,9 @@ export default function StoreSettingsForm({ initialSettings }: StoreSettingsForm
     if (logoFileRef.current) {
       formData.set('logo', logoFileRef.current);
     }
+    if (coverFileRef.current) {
+      formData.set('cover', coverFileRef.current);
+    }
 
     const result = await updateStoreSettings(formData);
 
@@ -54,6 +67,7 @@ export default function StoreSettingsForm({ initialSettings }: StoreSettingsForm
     } else {
       setMessage('Configurações salvas! Recarregue a página para ver as mudanças. ✅');
       logoFileRef.current = null;
+      coverFileRef.current = null;
     }
 
     setLoading(false);
@@ -61,6 +75,7 @@ export default function StoreSettingsForm({ initialSettings }: StoreSettingsForm
   };
 
   const currentLogoUrl = logoPreview || (settings.logo_url ? getSupabaseImageUrl(settings.logo_url) : null);
+  const currentCoverUrl = coverPreview || (settings.cover_url ? getSupabaseImageUrl(settings.cover_url) : null);
 
   return (
     <div className="bg-white dark:bg-neutral-900 rounded-2xl border border-gray-100 dark:border-neutral-800 p-5">
@@ -91,7 +106,7 @@ export default function StoreSettingsForm({ initialSettings }: StoreSettingsForm
             <div>
               <button
                 type="button"
-                onClick={() => fileInputRef.current?.click()}
+                onClick={() => logoInputRef.current?.click()}
                 className="px-4 py-2 text-sm font-medium rounded-xl border border-gray-200 dark:border-neutral-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors"
               >
                 {settings.logo_url ? 'Trocar Logo' : 'Enviar Logo'}
@@ -100,10 +115,52 @@ export default function StoreSettingsForm({ initialSettings }: StoreSettingsForm
                 PNG, JPG ou WebP. Recomendado: 200x200px.
               </p>
               <input
-                ref={fileInputRef}
+                ref={logoInputRef}
                 type="file"
                 accept="image/*"
                 onChange={handleLogoChange}
+                className="hidden"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Capa */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            Imagem de Capa (Banner)
+          </label>
+          <div className="flex flex-col gap-4">
+            {/* Preview da Capa */}
+            <div className="w-full h-32 rounded-xl border-2 border-dashed border-gray-300 dark:border-neutral-600 flex items-center justify-center overflow-hidden bg-gray-50 dark:bg-neutral-800 relative">
+              {currentCoverUrl ? (
+                <Image
+                  src={currentCoverUrl}
+                  alt="Capa"
+                  fill
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <span className="text-gray-400 dark:text-gray-500 text-sm">Nenhuma capa enviada</span>
+              )}
+            </div>
+
+            <div>
+              <button
+                type="button"
+                onClick={() => coverInputRef.current?.click()}
+                className="px-4 py-2 text-sm font-medium rounded-xl border border-gray-200 dark:border-neutral-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors"
+              >
+                {settings.cover_url ? 'Trocar Capa' : 'Enviar Capa'}
+              </button>
+              <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
+                Resolução horizontal recomendada (ex: 1200x400px).
+              </p>
+              <input
+                ref={coverInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleCoverChange}
                 className="hidden"
               />
             </div>

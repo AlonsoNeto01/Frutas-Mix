@@ -20,6 +20,7 @@ export async function getStoreSettings() {
         store_name: 'LancheFlow',
         whatsapp_number: null,
         logo_url: null,
+        cover_url: null,
         delivery_fee: 0,
         created_at: '',
       },
@@ -37,6 +38,7 @@ export async function updateStoreSettings(formData: FormData) {
   const whatsapp_number = formData.get('whatsapp_number') as string;
   const delivery_fee = parseFloat(formData.get('delivery_fee') as string) || 0;
   const logoFile = formData.get('logo') as File | null;
+  const coverFile = formData.get('cover') as File | null;
 
   const updateData: Record<string, unknown> = {
     store_name,
@@ -58,6 +60,22 @@ export async function updateStoreSettings(formData: FormData) {
     }
 
     updateData.logo_url = fileName;
+  }
+
+  // Upload da capa se fornecida
+  if (coverFile && coverFile.size > 0) {
+    const ext = coverFile.name.split('.').pop();
+    const fileName = `cover-${Date.now()}.${ext}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from('images')
+      .upload(fileName, coverFile, { upsert: true });
+
+    if (uploadError) {
+      return { error: `Erro no upload da capa: ${uploadError.message}` };
+    }
+
+    updateData.cover_url = fileName;
   }
 
   const { error } = await supabase

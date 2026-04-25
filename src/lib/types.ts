@@ -99,6 +99,7 @@ export interface StoreSettings {
   store_name: string;
   whatsapp_number: string | null;
   logo_url: string | null;
+  cover_url: string | null;
   delivery_fee: number;
   created_at: string;
 }

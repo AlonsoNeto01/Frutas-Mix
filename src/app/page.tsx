@@ -27,7 +27,7 @@ export default async function Home() {
       {/* Cover Image */}
       <div className="w-full h-48 md:h-64 lg:h-80 relative bg-neutral-800">
         <img 
-          src="https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=2000&auto=format&fit=crop" 
+          src={settingsResult.data?.cover_url ? getSupabaseImageUrl(settingsResult.data.cover_url) : "https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=2000&auto=format&fit=crop"}
           alt="Capa da Loja" 
           className="w-full h-full object-cover opacity-80"
         />
