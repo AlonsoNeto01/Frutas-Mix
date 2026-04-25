@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import type { Order, OrderStatus } from '@/lib/types';
 import { ORDER_STATUS_LABELS } from '@/lib/types';
-import { updateOrderStatus } from '@/lib/actions/orders';
+import { updateOrderStatus, deleteOrder } from '@/lib/actions/orders';
 import { createClient } from '@/lib/supabase/client';
 import OrderCard from './OrderCard';
 
@@ -147,6 +147,13 @@ export default function OrderKanban({ initialOrders }: OrderKanbanProps) {
           );
         }
       )
+      .on(
+        'postgres_changes',
+        { event: 'DELETE', schema: 'public', table: 'orders' },
+        (payload) => {
+          setOrders((prev) => prev.filter((o) => o.id !== payload.old.id));
+        }
+      )
       .subscribe();
 
     return () => {
@@ -169,6 +176,18 @@ export default function OrderKanban({ initialOrders }: OrderKanbanProps) {
       setOrders((prev) =>
         prev.map((o) => (o.id === orderId ? { ...o, status: currentStatus } : o))
       );
+    }
+  }, []);
+
+  const handleDeleteOrder = useCallback(async (orderId: string) => {
+    if (confirm('Tem certeza que deseja apagar este pedido? Isso não pode ser desfeito.')) {
+      // Optimistic delete
+      setOrders((prev) => prev.filter((o) => o.id !== orderId));
+      
+      const result = await deleteOrder(orderId);
+      if (result.error) {
+        alert('Erro ao apagar pedido: ' + result.error);
+      }
     }
   }, []);
 
@@ -207,6 +226,7 @@ export default function OrderKanban({ initialOrders }: OrderKanbanProps) {
                     order={order}
                     onAdvance={() => handleAdvanceStatus(order.id, status)}
                     nextStatus={NEXT_STATUS[status]}
+                    onDelete={() => handleDeleteOrder(order.id)}
                   />
                 ))
               )}

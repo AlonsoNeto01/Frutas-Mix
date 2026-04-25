@@ -108,3 +108,19 @@ export async function getOrderById(orderId: string) {
 
   return { data, error: null };
 }
+
+export async function deleteOrder(orderId: string) {
+  const supabase = await createClient();
+
+  const { error } = await supabase
+    .from('orders')
+    .delete()
+    .eq('id', orderId);
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  revalidatePath('/admin');
+  return { success: true };
+}

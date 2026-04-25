@@ -12,9 +12,10 @@ interface OrderCardProps {
   order: Order;
   onAdvance: () => void;
   nextStatus: OrderStatus | null;
+  onDelete?: () => void;
 }
 
-export default function OrderCard({ order, onAdvance, nextStatus }: OrderCardProps) {
+export default function OrderCard({ order, onAdvance, nextStatus, onDelete }: OrderCardProps) {
   const [printing, setPrinting] = useState(false);
   const printRef = useRef<HTMLDivElement>(null);
 
@@ -103,6 +104,20 @@ export default function OrderCard({ order, onAdvance, nextStatus }: OrderCardPro
                 <rect x="6" y="14" width="12" height="8" />
               </svg>
             </button>
+
+            {onDelete && order.status === 'concluido' && (
+              <button
+                onClick={onDelete}
+                className="p-2 rounded-lg text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-500/10 transition-all"
+                title="Apagar pedido"
+                aria-label="Apagar pedido"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M3 6h18" />
+                  <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2" />
+                </svg>
+              </button>
+            )}
 
             {nextStatus && (
               <Button size="sm" onClick={onAdvance}>
