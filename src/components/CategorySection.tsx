@@ -14,14 +14,11 @@ export default function CategorySection({ category, products, onProductClick }: 
   if (products.length === 0) return null;
 
   return (
-    <section className="mb-10" id={`category-${category.id}`}>
-      <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-5 flex items-center gap-2">
+    <section className="mb-12 scroll-mt-24" id={`category-${category.id}`}>
+      <h2 className="text-lg md:text-xl font-bold text-gray-900 dark:text-gray-100 mb-6 uppercase tracking-wide border-b border-gray-100 dark:border-neutral-800 pb-2">
         {category.name}
-        <span className="text-sm font-normal text-gray-400 dark:text-gray-500">
-          ({products.length})
-        </span>
       </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {products.map((product) => (
           <ProductCard
             key={product.id}
