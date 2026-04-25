@@ -2,6 +2,7 @@ import { getCategories } from '@/lib/actions/categories';
 import { getActiveProducts } from '@/lib/actions/products';
 import { checkStoreOpen } from '@/lib/actions/business-hours';
 import { getStoreSettings } from '@/lib/actions/store-settings';
+import { getSupabaseImageUrl } from '@/lib/utils';
 import Header from '@/components/Header';
 import StoreStatusBanner from '@/components/StoreStatusBanner';
 import HomeClient from './HomeClient';
@@ -35,15 +36,15 @@ export default async function Home() {
 
       {/* Store Info Header */}
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center -mt-16 sm:-mt-20 z-10 mb-8">
-        <div className="inline-block p-1 bg-background rounded-full shadow-lg">
+        <div className="inline-block p-1 bg-background rounded-full shadow-lg relative w-24 h-24 sm:w-32 sm:h-32">
           {settingsResult.data?.logo_url ? (
             <img 
-              src={`https://tvixlkkntovgqqycyrhr.supabase.co/storage/v1/object/public/images/${settingsResult.data.logo_url}`}
+              src={getSupabaseImageUrl(settingsResult.data.logo_url) || ''}
               alt={storeName}
-              className="w-24 h-24 sm:w-32 sm:h-32 rounded-full object-cover border-4 border-background"
+              className="absolute inset-1 w-[calc(100%-8px)] h-[calc(100%-8px)] rounded-full object-cover border-4 border-background bg-background"
             />
           ) : (
-            <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center border-4 border-background shadow-inner">
+            <div className="absolute inset-1 w-[calc(100%-8px)] h-[calc(100%-8px)] rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center border-4 border-background shadow-inner">
               <span className="text-white text-3xl sm:text-4xl font-bold">🍔</span>
             </div>
           )}

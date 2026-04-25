@@ -15,7 +15,7 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
   return (
     <button
       onClick={onClick}
-      className="group flex w-full text-left bg-transparent rounded-xl overflow-hidden hover:bg-neutral-100 dark:hover:bg-neutral-800/50 transition-colors p-3 gap-4 items-center focus:outline-none focus:ring-2 focus:ring-orange-500/40"
+      className="group flex w-full text-left bg-white dark:bg-[#141414] border border-gray-100 dark:border-neutral-800/50 rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all duration-300 p-3 gap-4 items-center focus:outline-none focus:ring-2 focus:ring-orange-500/40"
       id={`product-card-${product.id}`}
     >
       {/* Image */}
@@ -37,12 +37,12 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
 
       {/* Info */}
       <div className="flex-1 min-w-0 py-1">
-        <div className="flex justify-between items-start mb-1 gap-2">
+        <div className="flex items-center gap-2 mb-1.5">
           <h3 className="font-semibold text-gray-900 dark:text-gray-100 line-clamp-2 leading-tight">
             {product.name}
           </h3>
           {product.is_highlight && (
-            <span className="shrink-0 px-1.5 py-0.5 bg-orange-500 text-white text-[10px] font-bold rounded">
+            <span className="shrink-0 text-orange-500 text-sm" title="Destaque da Casa">
               ⭐
             </span>
           )}
