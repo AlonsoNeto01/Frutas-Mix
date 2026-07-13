@@ -18,7 +18,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     setMounted(true);
     try {
-      const saved = localStorage.getItem('lancheflow-theme') as Theme;
+      const saved = localStorage.getItem('frutasmix-theme') as Theme;
       if (saved === 'dark' || saved === 'light') {
         setTheme(saved);
       } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -37,7 +37,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     } else {
       root.classList.remove('dark');
     }
-    localStorage.setItem('lancheflow-theme', theme);
+    localStorage.setItem('frutasmix-theme', theme);
   }, [theme, mounted]);
 
   const toggleTheme = () => {

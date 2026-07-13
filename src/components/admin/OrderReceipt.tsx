@@ -20,7 +20,7 @@ export default function OrderReceipt({ order }: OrderReceiptProps) {
     }}>
       {/* Header */}
       <div style={{ textAlign: 'center', marginBottom: '8px' }}>
-        <div style={{ fontSize: '16px', fontWeight: 'bold' }}>🍔 LancheFlow</div>
+        <div style={{ fontSize: '16px', fontWeight: 'bold' }}>🍉 Frutas Mix</div>
         <div style={{ fontSize: '10px', marginTop: '4px' }}>
           {formatDateTime(order.created_at)}
         </div>

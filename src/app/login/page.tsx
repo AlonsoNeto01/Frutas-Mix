@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
-import type { Metadata } from 'next';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -41,11 +40,11 @@ export default function LoginPage() {
       <div className="w-full max-w-sm">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center shadow-xl shadow-orange-500/20 mx-auto mb-4">
-            <span className="text-3xl">🍔</span>
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center shadow-xl shadow-green-500/20 mx-auto mb-4">
+            <span className="text-3xl">🍉</span>
           </div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-            LancheFlow
+            Frutas Mix
           </h1>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             Painel Administrativo
@@ -57,7 +56,7 @@ export default function LoginPage() {
             id="login-email"
             label="E-mail"
             type="email"
-            placeholder="admin@lancheflow.com"
+            placeholder="admin@frutasmix.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required

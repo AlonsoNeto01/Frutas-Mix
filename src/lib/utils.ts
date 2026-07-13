@@ -1,5 +1,5 @@
 // ============================================
-// LancheFlow — Utility functions
+// Frutas Mix — Utility functions
 // ============================================
 
 export function formatCurrency(value: number): string {

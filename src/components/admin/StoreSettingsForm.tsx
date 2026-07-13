@@ -171,7 +171,7 @@ export default function StoreSettingsForm({ initialSettings }: StoreSettingsForm
         <Input
           id="store-name"
           label="Nome da Loja"
-          placeholder="LancheFlow"
+          placeholder="Frutas Mix"
           value={settings.store_name}
           onChange={(e) => handleChange('store_name', e.target.value)}
         />

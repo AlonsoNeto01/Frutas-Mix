@@ -15,7 +15,7 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
   return (
     <button
       onClick={onClick}
-      className="group flex w-full text-left bg-white dark:bg-[#141414] border border-gray-100 dark:border-neutral-800/50 rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all duration-300 p-3 gap-4 items-center focus:outline-none focus:ring-2 focus:ring-orange-500/40"
+      className="group flex w-full text-left bg-white dark:bg-[#141414] border border-gray-100 dark:border-neutral-800/50 rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all duration-300 p-3 gap-4 items-center focus:outline-none focus:ring-2 focus:ring-green-500/40"
       id={`product-card-${product.id}`}
     >
       {/* Image */}
@@ -30,7 +30,7 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-3xl opacity-40">
-            🍔
+            🍉
           </div>
         )}
       </div>
@@ -42,7 +42,7 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
             {product.name}
           </h3>
           {product.is_highlight && (
-            <span className="shrink-0 text-orange-500 text-sm" title="Destaque da Casa">
+            <span className="shrink-0 text-green-500 text-sm" title="Destaque da Casa">
               ⭐
             </span>
           )}

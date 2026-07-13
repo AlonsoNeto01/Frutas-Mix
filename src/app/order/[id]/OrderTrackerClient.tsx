@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { formatCurrency } from '@/lib/utils';
@@ -39,12 +39,12 @@ const STATUS_CONFIG: Record<OrderStatus, { icon: string; description: string; co
 export default function OrderTrackerClient({ initialOrder }: OrderTrackerClientProps) {
   const router = useRouter();
   const [order, setOrder] = useState<Order>(initialOrder);
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
 
   useEffect(() => {
     // If initially loaded as completed, clear it
     if (order.status === 'concluido') {
-      localStorage.removeItem('lancheflow-active-order');
+      localStorage.removeItem('frutasmix-active-order');
     }
 
     // Setup realtime subscription
@@ -64,8 +64,8 @@ export default function OrderTrackerClient({ initialOrder }: OrderTrackerClientP
             
             // Clear active order from localStorage if completed
             if (newOrder.status === 'concluido') {
-              localStorage.removeItem('lancheflow-active-order');
-              window.dispatchEvent(new Event('lancheflow-order-update'));
+              localStorage.removeItem('frutasmix-active-order');
+              window.dispatchEvent(new Event('frutasmix-order-update'));
             }
             
             return newOrder;

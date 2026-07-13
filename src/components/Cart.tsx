@@ -86,7 +86,7 @@ export default function Cart({ isOpen, onClose }: CartProps) {
                 Seu carrinho está vazio
               </p>
               <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">
-                Adicione itens do cardápio
+                Adicione frutas ao seu pedido!
               </p>
             </div>
           ) : (

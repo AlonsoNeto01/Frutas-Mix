@@ -6,8 +6,8 @@ import CheckoutForm from '@/components/CheckoutForm';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Checkout — LancheFlow',
-  description: 'Finalize seu pedido no LancheFlow',
+  title: 'Checkout — Frutas Mix',
+  description: 'Finalize seu pedido no Frutas Mix',
 };
 
 export default async function CheckoutPage() {

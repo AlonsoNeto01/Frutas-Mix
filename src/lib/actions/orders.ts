@@ -2,7 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
-import type { OrderStatus } from '@/lib/types';
+import type { OrderStatus, SerializedAddon } from '@/lib/types';
 
 export async function createOrder(data: {
   customer_name: string;
@@ -19,7 +19,7 @@ export async function createOrder(data: {
     quantity: number;
     unit_price: number;
     observation: string | null;
-    addons?: any[];
+    addons?: SerializedAddon[];
   }[];
 }) {
   const supabase = await createClient();

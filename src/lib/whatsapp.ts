@@ -1,5 +1,5 @@
 // ============================================
-// LancheFlow — WhatsApp Integration
+// Frutas Mix — WhatsApp Integration
 // ============================================
 
 import type { CartItem } from './types';
@@ -26,7 +26,7 @@ const PAYMENT_LABELS: Record<string, string> = {
 export function buildWhatsAppMessage(data: WhatsAppOrderData): string {
   const lines: string[] = [];
 
-  lines.push('🍔 *NOVO PEDIDO — LancheFlow*');
+  lines.push('🍉 *NOVO PEDIDO — Frutas Mix*');
   lines.push('━━━━━━━━━━━━━━━━━━━━');
   lines.push('');
   lines.push(`👤 *Cliente:* ${data.customerName}`);
@@ -62,7 +62,7 @@ export function buildWhatsAppMessage(data: WhatsAppOrderData): string {
 
   lines.push('');
   lines.push('━━━━━━━━━━━━━━━━━━━━');
-  lines.push('_Pedido enviado via LancheFlow_ 🧡');
+  lines.push('_Pedido enviado via Frutas Mix_ 🍍');
 
   return lines.join('\n');
 }

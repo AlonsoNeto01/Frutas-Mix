@@ -47,13 +47,24 @@ export async function checkStoreOpen() {
   const supabase = await createClient();
 
   const now = new Date();
-  const dayOfWeek = now.getDay(); // 0 = Domingo
-  const currentTime = now.toLocaleTimeString('pt-BR', {
+
+  // Calcular dia e hora no timezone de São Paulo (não do servidor)
+  const spFormatter = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/Sao_Paulo',
+    weekday: 'short',
     hour: '2-digit',
     minute: '2-digit',
     hour12: false,
-    timeZone: 'America/Sao_Paulo',
   });
+  const parts = spFormatter.formatToParts(now);
+  const weekdayStr = parts.find((p) => p.type === 'weekday')?.value || '';
+  const dayMap: Record<string, number> = {
+    Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6,
+  };
+  const dayOfWeek = dayMap[weekdayStr] ?? now.getDay();
+  const hourPart = parts.find((p) => p.type === 'hour')?.value || '00';
+  const minutePart = parts.find((p) => p.type === 'minute')?.value || '00';
+  const currentTime = `${hourPart}:${minutePart}`;
 
   const { data, error } = await supabase
     .from('business_hours')

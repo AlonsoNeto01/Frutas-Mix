@@ -15,9 +15,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'LancheFlow — Delivery de Lanches',
-  description: 'Peça seus lanches favoritos online com entrega rápida e prática. LancheFlow, o melhor delivery da região!',
-  keywords: ['delivery', 'lanches', 'hambúrguer', 'pedido online', 'entrega'],
+  title: 'Frutas Mix — Delivery de Frutas Cortadas',
+  description: 'Peça seu copo tropical com frutas frescas cortadas, sucos naturais e pudim. Delivery rápido e prático. Frutas Mix!',
+  keywords: ['frutas', 'delivery', 'frutas cortadas', 'copo tropical', 'suco natural', 'abacaxi', 'manga', 'melancia', 'pudim'],
 };
 
 export default async function RootLayout({

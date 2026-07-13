@@ -67,19 +67,19 @@ export default function DashboardStats({ initialOrders }: DashboardStatsProps) {
   const dailyOrders = orders.filter((o) => isSameDay(parseISO(o.created_at), now));
   const dailyEarnings = completedOrders
     .filter((o) => isSameDay(parseISO(o.created_at), now))
-    .reduce((sum, o) => sum + o.total, 0);
+    .reduce((sum, o) => sum + Number(o.total), 0);
 
   // Weekly Stats
   const weeklyOrders = orders.filter((o) => isSameWeek(parseISO(o.created_at), now, { weekStartsOn: 0 }));
   const weeklyEarnings = completedOrders
     .filter((o) => isSameWeek(parseISO(o.created_at), now, { weekStartsOn: 0 }))
-    .reduce((sum, o) => sum + o.total, 0);
+    .reduce((sum, o) => sum + Number(o.total), 0);
 
   // Monthly Stats
   const monthlyOrders = orders.filter((o) => isSameMonth(parseISO(o.created_at), now));
   const monthlyEarnings = completedOrders
     .filter((o) => isSameMonth(parseISO(o.created_at), now))
-    .reduce((sum, o) => sum + o.total, 0);
+    .reduce((sum, o) => sum + Number(o.total), 0);
 
   // Chart Data (Last 7 days)
   const chartData = Array.from({ length: 7 }).map((_, i) => {

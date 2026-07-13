@@ -21,9 +21,9 @@ export async function getAddonGroupsByProduct(productId: string) {
   }
 
   // Ordenar items também
-  const groups = data.map((g: any) => ({
+  const groups = data.map((g) => ({
     ...g,
-    items: g.items.sort((a: any, b: any) => a.sort_order - b.sort_order),
+    items: (g.items as AddonItem[]).sort((a, b) => a.sort_order - b.sort_order),
   })) as AddonGroup[];
 
   return { data: groups, error: null };

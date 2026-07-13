@@ -28,7 +28,7 @@ export default function Tabs({ tabs, defaultTab }: TabsProps) {
             className={cn(
               'flex items-center gap-2 px-5 py-3 text-sm font-medium transition-all duration-200 border-b-2 whitespace-nowrap',
               activeTab === tab.id
-                ? 'border-orange-500 text-orange-600 dark:text-orange-400 dark:border-orange-400'
+                ? 'border-green-500 text-green-600 dark:text-green-400 dark:border-green-400'
                 : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
             )}
           >

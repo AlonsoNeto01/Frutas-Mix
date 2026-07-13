@@ -24,8 +24,8 @@ export default function CartItemRow({ index }: CartItemRowProps) {
             📝 {item.observation}
           </p>
         )}
-        <p className="text-sm font-bold text-orange-600 dark:text-orange-400 mt-1">
-          {formatCurrency(item.product.price * item.quantity)}
+        <p className="text-sm font-bold text-green-600 dark:text-green-400 mt-1">
+          {formatCurrency((Number(item.product.price) + (item.addons?.reduce((s, a) => s + Number(a.price), 0) || 0)) * item.quantity)}
         </p>
       </div>
 

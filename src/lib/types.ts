@@ -1,5 +1,5 @@
 // ============================================
-// LancheFlow — Tipos TypeScript
+// Frutas Mix — Tipos TypeScript
 // ============================================
 
 export type OrderStatus = 'novo' | 'preparando' | 'entrega' | 'concluido';
@@ -45,6 +45,13 @@ export interface AddonItem {
   created_at: string;
 }
 
+// Addon serializado (salvo como JSONB nos pedidos)
+export interface SerializedAddon {
+  id: string;
+  name: string;
+  price: number;
+}
+
 export interface DeliveryNeighborhood {
   id: string;
   name: string;
@@ -84,7 +91,7 @@ export interface OrderItem {
   quantity: number;
   unit_price: number;
   observation: string | null;
-  addons?: any; // JSONB array of selected addons
+  addons?: SerializedAddon[];
 }
 
 export interface CartItem {

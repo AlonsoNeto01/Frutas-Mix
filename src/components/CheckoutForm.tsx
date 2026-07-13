@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCart } from '@/contexts/CartContext';
 import { createOrder } from '@/lib/actions/orders';
@@ -27,15 +27,20 @@ export default function CheckoutForm({ isStoreOpen, defaultDeliveryFee, whatsapp
   const [whatsappUrl, setWhatsappUrl] = useState('');
   const [orderId, setOrderId] = useState<string | null>(null);
 
-  const [formData, setFormData] = useState(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        const saved = localStorage.getItem('lancheflow-customer');
-        if (saved) return { ...JSON.parse(saved), payment_method: 'pix', change_for: '', neighborhood_id: '' };
-      } catch { /* ignore */ }
-    }
-    return { name: '', phone: '', address: '', payment_method: 'pix', change_for: '', neighborhood_id: '' };
+  const [formData, setFormData] = useState({
+    name: '', phone: '', address: '', payment_method: 'pix', change_for: '', neighborhood_id: '',
   });
+
+  // Carregar dados salvos do cliente após montagem (evita hydration mismatch)
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('frutasmix-customer');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        setFormData((prev) => ({ ...prev, ...parsed, payment_method: 'pix', change_for: '', neighborhood_id: parsed.neighborhood_id || '' }));
+      }
+    } catch { /* ignore */ }
+  }, []);
 
   const selectedNeighborhood = neighborhoods.find(n => n.id === formData.neighborhood_id);
   const deliveryFee = selectedNeighborhood ? Number(selectedNeighborhood.fee) : Number(defaultDeliveryFee);
@@ -56,7 +61,7 @@ export default function CheckoutForm({ isStoreOpen, defaultDeliveryFee, whatsapp
     try {
       // Salvar dados do cliente
       localStorage.setItem(
-        'lancheflow-customer',
+        'frutasmix-customer',
         JSON.stringify({ name: formData.name, phone: formData.phone, address: formData.address, neighborhood_id: formData.neighborhood_id })
       );
 
@@ -109,7 +114,7 @@ export default function CheckoutForm({ isStoreOpen, defaultDeliveryFee, whatsapp
 
       setOrderId(result.orderId ?? null);
       if (result.orderId) {
-        localStorage.setItem('lancheflow-active-order', result.orderId);
+        localStorage.setItem('frutasmix-active-order', result.orderId);
       }
       
       clearCart();
@@ -129,7 +134,7 @@ export default function CheckoutForm({ isStoreOpen, defaultDeliveryFee, whatsapp
           Pedido enviado com sucesso!
         </h2>
         <p className="mt-2 text-gray-600 dark:text-gray-400">
-          Seu pedido foi registrado e a lanchonete já pode vê-lo.
+          Seu pedido foi registrado! Já estamos separando suas frutas! 🍍
         </p>
 
         {whatsappUrl && (
@@ -234,7 +239,7 @@ export default function CheckoutForm({ isStoreOpen, defaultDeliveryFee, whatsapp
           </div>
           <div className="flex justify-between items-center pt-2 border-t border-gray-100 dark:border-neutral-800">
             <span className="font-bold text-gray-900 dark:text-gray-100">Total</span>
-            <span className="text-xl font-bold text-orange-600 dark:text-orange-400">
+            <span className="text-xl font-bold text-green-600 dark:text-green-400">
               {formatCurrency(grandTotal)}
             </span>
           </div>
@@ -270,7 +275,7 @@ export default function CheckoutForm({ isStoreOpen, defaultDeliveryFee, whatsapp
             value={formData.neighborhood_id}
             onChange={(e) => handleChange('neighborhood_id', e.target.value)}
             required
-            className="w-full px-4 py-3 bg-gray-50 dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all text-gray-900 dark:text-gray-100"
+            className="w-full px-4 py-3 bg-gray-50 dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all text-gray-900 dark:text-gray-100"
           >
             <option value="">Selecione seu bairro...</option>
             {neighborhoods.filter(n => n.is_active).map(n => (
@@ -305,7 +310,7 @@ export default function CheckoutForm({ isStoreOpen, defaultDeliveryFee, whatsapp
               onClick={() => handleChange('payment_method', method.value)}
               className={`py-3 px-4 rounded-xl border-2 text-sm font-semibold transition-all ${
                 formData.payment_method === method.value
-                  ? 'border-orange-500 bg-orange-50 text-orange-700 dark:bg-orange-500/10 dark:text-orange-400 dark:border-orange-400'
+                  ? 'border-green-500 bg-green-50 text-green-700 dark:bg-green-500/10 dark:text-green-400 dark:border-green-400'
                   : 'border-gray-200 dark:border-neutral-700 text-gray-600 dark:text-gray-400 hover:border-gray-300 dark:hover:border-neutral-600'
               }`}
             >

@@ -32,11 +32,11 @@ export default function Header() {
                   className="w-9 h-9 rounded-xl object-cover shadow-lg"
                 />
               ) : (
-                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center shadow-lg shadow-orange-500/20 group-hover:shadow-orange-500/40 transition-shadow">
-                  <span className="text-white text-lg font-bold">🍔</span>
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center shadow-lg shadow-green-500/20 group-hover:shadow-green-500/40 transition-shadow">
+                  <span className="text-white text-lg font-bold">🍉</span>
                 </div>
               )}
-              <span className="text-xl font-bold bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">
+              <span className="text-xl font-bold bg-gradient-to-r from-green-500 to-green-600 bg-clip-text text-transparent">
                 {storeName}
               </span>
             </Link>
@@ -58,7 +58,7 @@ export default function Header() {
                   <path d="M16 10a4 4 0 01-8 0" />
                 </svg>
                 {itemCount > 0 && (
-                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-orange-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center animate-scaleIn">
+                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-green-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center animate-scaleIn">
                     {itemCount > 99 ? '99+' : itemCount}
                   </span>
                 )}

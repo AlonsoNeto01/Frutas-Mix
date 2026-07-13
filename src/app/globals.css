@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* ============================================
-   LancheFlow — Design System
+   Frutas Mix — Design System
    ============================================ */
 
 @custom-variant dark (&:is(.dark *));
@@ -12,8 +12,8 @@
   --foreground: #171717;
   --muted: #737373;
   --border: #E5E5E5;
-  --primary: #F97316;
-  --primary-hover: #EA580C;
+  --primary: #22C55E;
+  --primary-hover: #16A34A;
 }
 
 .dark {
@@ -22,8 +22,8 @@
   --foreground: #FAFAFA;
   --muted: #A3A3A3;
   --border: #262626;
-  --primary: #FB923C;
-  --primary-hover: #F97316;
+  --primary: #4ADE80;
+  --primary-hover: #22C55E;
 }
 
 html {
@@ -141,6 +141,6 @@ body {
    ============================================ */
 
 ::selection {
-  background: #F9731640;
+  background: #22C55E40;
   color: inherit;
 }

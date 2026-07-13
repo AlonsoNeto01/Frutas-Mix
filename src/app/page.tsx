@@ -3,8 +3,8 @@ import { getActiveProducts } from '@/lib/actions/products';
 import { checkStoreOpen } from '@/lib/actions/business-hours';
 import { getStoreSettings } from '@/lib/actions/store-settings';
 import { getSupabaseImageUrl } from '@/lib/utils';
+import Image from 'next/image';
 import Header from '@/components/Header';
-import StoreStatusBanner from '@/components/StoreStatusBanner';
 import HomeClient from './HomeClient';
 import type { Category, Product } from '@/lib/types';
 
@@ -18,7 +18,7 @@ export default async function Home() {
 
   const categories = (categoriesResult.data || []) as Category[];
   const products = (productsResult.data || []) as Product[];
-  const storeName = settingsResult.data?.store_name || 'LancheFlow';
+  const storeName = settingsResult.data?.store_name || 'Frutas Mix';
 
   return (
     <>
@@ -26,10 +26,13 @@ export default async function Home() {
       
       {/* Cover Image */}
       <div className="w-full h-48 md:h-64 lg:h-80 relative bg-neutral-800">
-        <img 
+        <Image 
           src={settingsResult.data?.cover_url ? (getSupabaseImageUrl(settingsResult.data.cover_url) ?? "https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=2000&auto=format&fit=crop") : "https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=2000&auto=format&fit=crop"}
-          alt="Capa da Loja" 
-          className="w-full h-full object-cover opacity-80"
+          alt="Capa da Loja"
+          fill
+          className="object-cover opacity-80"
+          sizes="100vw"
+          priority
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent opacity-60" />
       </div>
@@ -44,8 +47,8 @@ export default async function Home() {
               className="absolute inset-1 w-[calc(100%-8px)] h-[calc(100%-8px)] rounded-full object-cover border-4 border-background bg-background"
             />
           ) : (
-            <div className="absolute inset-1 w-[calc(100%-8px)] h-[calc(100%-8px)] rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center border-4 border-background shadow-inner">
-              <span className="text-white text-3xl sm:text-4xl font-bold">🍔</span>
+            <div className="absolute inset-1 w-[calc(100%-8px)] h-[calc(100%-8px)] rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center border-4 border-background shadow-inner">
+              <span className="text-white text-3xl sm:text-4xl font-bold">🍉</span>
             </div>
           )}
         </div>
@@ -98,12 +101,12 @@ export default async function Home() {
 
         {products.length === 0 && (
           <div className="text-center py-20">
-            <span className="text-6xl block mb-4">🍔</span>
+            <span className="text-6xl block mb-4">🍉</span>
             <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
-              Cardápio em breve!
+              Cardápio em breve! 🍍
             </h2>
             <p className="mt-2 text-gray-500 dark:text-gray-400">
-              Estamos preparando nosso cardápio. Volte em breve!
+              Estamos selecionando as melhores frutas. Volte em breve!
             </p>
           </div>
         )}

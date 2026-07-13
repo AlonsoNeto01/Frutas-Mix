@@ -2,8 +2,9 @@
 
 import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
+import { cache } from 'react';
 
-export async function getStoreSettings() {
+export const getStoreSettings = cache(async function getStoreSettings() {
   const supabase = await createClient();
 
   const { data, error } = await supabase
@@ -17,7 +18,7 @@ export async function getStoreSettings() {
       error: error.message,
       data: {
         id: '',
-        store_name: 'LancheFlow',
+        store_name: 'Frutas Mix',
         whatsapp_number: null,
         logo_url: null,
         cover_url: null,
@@ -28,7 +29,7 @@ export async function getStoreSettings() {
   }
 
   return { data, error: null };
-}
+});
 
 export async function updateStoreSettings(formData: FormData) {
   const supabase = await createClient();

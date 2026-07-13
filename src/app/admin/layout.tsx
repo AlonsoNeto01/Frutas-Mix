@@ -4,8 +4,8 @@ import AdminLayoutClient from './AdminLayoutClient';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Admin — LancheFlow',
-  description: 'Painel administrativo do LancheFlow',
+  title: 'Admin — Frutas Mix',
+  description: 'Painel administrativo do Frutas Mix',
 };
 
 export default async function AdminLayout({

@@ -103,11 +103,11 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-6xl opacity-30">
-            🍔
+            🍉
           </div>
         )}
         {product.is_highlight && (
-          <span className="absolute top-3 left-3 inline-flex items-center gap-1 px-3 py-1.5 bg-orange-500 text-white text-xs font-bold rounded-full shadow-lg">
+          <span className="absolute top-3 left-3 inline-flex items-center gap-1 px-3 py-1.5 bg-green-500 text-white text-xs font-bold rounded-full shadow-lg">
             ⭐ Destaque
           </span>
         )}
@@ -122,7 +122,7 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
           {product.description}
         </p>
       )}
-      <p className="mt-3 text-2xl font-bold text-orange-600 dark:text-orange-400">
+      <p className="mt-3 text-2xl font-bold text-green-600 dark:text-green-400">
         {formatCurrency(product.price)}
       </p>
 
@@ -134,8 +134,8 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
         <textarea
           value={observation}
           onChange={(e) => setObservation(e.target.value)}
-          placeholder="Ex: Sem cebola, molho extra..."
-          className="w-full h-20 rounded-xl border border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 px-4 py-3 text-sm text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20 resize-none transition-all"
+          placeholder="Ex: Bem gelado, sem sal..."
+          className="w-full h-20 rounded-xl border border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 px-4 py-3 text-sm text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20 resize-none transition-all"
           id="product-observation"
         />
       </div>
@@ -172,7 +172,7 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
                         key={item.id} 
                         className={`flex justify-between items-center p-3 rounded-lg border-2 cursor-pointer transition-all ${
                           isChecked 
-                            ? 'border-orange-500 bg-orange-50 dark:bg-orange-500/10' 
+                            ? 'border-green-500 bg-green-50 dark:bg-green-500/10' 
                             : 'border-transparent hover:bg-gray-200 dark:hover:bg-neutral-700/50'
                         } ${disabled && !isChecked ? 'opacity-50 cursor-not-allowed' : ''}`}
                       >
@@ -183,12 +183,12 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
                             checked={isChecked}
                             disabled={disabled && !isChecked}
                             onChange={() => handleAddonSelect(group, item)}
-                            className="w-5 h-5 text-orange-500 border-gray-300 focus:ring-orange-500"
+                            className="w-5 h-5 text-green-500 border-gray-300 focus:ring-green-500"
                           />
                           <span className="font-medium text-sm text-gray-900 dark:text-gray-100">{item.name}</span>
                         </div>
                         {Number(item.price) > 0 && (
-                          <span className="text-sm font-medium text-orange-600 dark:text-orange-400">
+                          <span className="text-sm font-medium text-green-600 dark:text-green-400">
                             + {formatCurrency(item.price)}
                           </span>
                         )}

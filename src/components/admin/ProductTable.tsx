@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import type { Product, Category } from '@/lib/types';
 import { formatCurrency, getSupabaseImageUrl } from '@/lib/utils';
 import { deleteProduct } from '@/lib/actions/products';
@@ -18,6 +19,7 @@ interface ProductTableProps {
 }
 
 export default function ProductTable({ initialProducts, initialCategories }: ProductTableProps) {
+  const router = useRouter();
   const [products, setProducts] = useState(initialProducts);
   const [categories, setCategories] = useState(initialCategories);
   const [showForm, setShowForm] = useState(false);
@@ -37,8 +39,7 @@ export default function ProductTable({ initialProducts, initialCategories }: Pro
   const handleSuccess = () => {
     setShowForm(false);
     setEditProduct(null);
-    // Reload will happen via revalidatePath
-    window.location.reload();
+    router.refresh();
   };
 
   const handleAddCategory = async () => {
@@ -47,7 +48,7 @@ export default function ProductTable({ initialProducts, initialCategories }: Pro
     const result = await createCategory(newCategory.trim());
     if (!result.error) {
       setNewCategory('');
-      window.location.reload();
+      router.refresh();
     }
     setCatLoading(false);
   };

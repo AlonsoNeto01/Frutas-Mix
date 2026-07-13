@@ -6,7 +6,7 @@ import type { Metadata } from 'next';
 
 
 export const metadata: Metadata = {
-  title: 'Acompanhar Pedido — LancheFlow',
+  title: 'Acompanhar Pedido — Frutas Mix',
   description: 'Acompanhe o status do seu pedido em tempo real.',
 };
 

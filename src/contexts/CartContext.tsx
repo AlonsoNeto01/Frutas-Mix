@@ -147,7 +147,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   // Carregar do localStorage
   useEffect(() => {
     try {
-      const saved = localStorage.getItem('lancheflow-cart');
+      const saved = localStorage.getItem('frutasmix-cart');
       if (saved) {
         const items = JSON.parse(saved) as CartItem[];
         dispatch({ type: 'LOAD_CART', items });
@@ -160,7 +160,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   // Salvar no localStorage
   useEffect(() => {
     try {
-      localStorage.setItem('lancheflow-cart', JSON.stringify(state.items));
+      localStorage.setItem('frutasmix-cart', JSON.stringify(state.items));
     } catch {
       // ignore
     }

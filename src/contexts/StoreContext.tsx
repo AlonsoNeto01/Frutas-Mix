@@ -9,7 +9,7 @@ interface StoreContextType {
 }
 
 const StoreContext = createContext<StoreContextType>({
-  storeName: 'LancheFlow',
+  storeName: 'Frutas Mix',
   logoUrl: null,
 });
 
@@ -23,7 +23,7 @@ export function StoreProvider({
   return (
     <StoreContext.Provider
       value={{
-        storeName: settings?.store_name || 'LancheFlow',
+        storeName: settings?.store_name || 'Frutas Mix',
         logoUrl: settings?.logo_url || null,
       }}
     >

@@ -2,7 +2,7 @@
 
 import { useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import type { Order, OrderStatus } from '@/lib/types';
+import type { Order, OrderStatus, SerializedAddon } from '@/lib/types';
 import { ORDER_STATUS_LABELS, PAYMENT_METHOD_LABELS } from '@/lib/types';
 import { formatCurrency, formatDateTime, formatPhone } from '@/lib/utils';
 import OrderReceipt from './OrderReceipt';
@@ -77,7 +77,7 @@ export default function OrderCard({ order, onAdvance, nextStatus, onDelete }: Or
                 </div>
                 {item.addons && Array.isArray(item.addons) && item.addons.length > 0 && (
                   <div className="text-gray-500 dark:text-gray-400 ml-3 border-l border-gray-200 dark:border-neutral-700 pl-2 mt-0.5">
-                    {item.addons.map((a: any, i: number) => (
+                    {item.addons.map((a: SerializedAddon, i: number) => (
                       <div key={i}>+ {a.name}</div>
                     ))}
                   </div>
