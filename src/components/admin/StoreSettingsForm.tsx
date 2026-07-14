@@ -5,6 +5,7 @@ import Image from 'next/image';
 import type { StoreSettings } from '@/lib/types';
 import { updateStoreSettings } from '@/lib/actions/store-settings';
 import { getSupabaseImageUrl } from '@/lib/utils';
+import { createClient } from '@/lib/supabase/client';
 import Button from '../ui/Button';
 import Input from '../ui/Input';
 
@@ -43,22 +44,57 @@ export default function StoreSettingsForm({ initialSettings }: StoreSettingsForm
     }
   };
 
+  // Upload direto do navegador para o Supabase Storage
+  async function uploadFile(file: File, prefix: string): Promise<string> {
+    const supabase = createClient();
+    const ext = file.name.split('.').pop() || 'png';
+    const fileName = `${prefix}-${Date.now()}.${ext}`;
+
+    const { error } = await supabase.storage
+      .from('images')
+      .upload(fileName, file, {
+        contentType: file.type,
+        upsert: true,
+      });
+
+    if (error) {
+      throw new Error(`Erro no upload: ${error.message}`);
+    }
+
+    return fileName;
+  }
+
   const handleSave = async () => {
     setLoading(true);
     setMessage('');
 
     try {
+      let newLogoPath: string | undefined;
+      let newCoverPath: string | undefined;
+
+      // Upload de imagens direto do navegador (sem passar pelo servidor)
+      if (logoFileRef.current) {
+        setMessage('Enviando logo...');
+        newLogoPath = await uploadFile(logoFileRef.current, 'logo');
+      }
+      if (coverFileRef.current) {
+        setMessage('Enviando capa...');
+        newCoverPath = await uploadFile(coverFileRef.current, 'cover');
+      }
+
+      // Agora salva apenas os dados de texto + caminhos das imagens via Server Action
+      setMessage('Salvando configurações...');
       const formData = new FormData();
       formData.set('id', settings.id);
       formData.set('store_name', settings.store_name);
       formData.set('whatsapp_number', settings.whatsapp_number || '');
       formData.set('delivery_fee', String(settings.delivery_fee));
 
-      if (logoFileRef.current) {
-        formData.set('logo', logoFileRef.current);
+      if (newLogoPath) {
+        formData.set('logo_path', newLogoPath);
       }
-      if (coverFileRef.current) {
-        formData.set('cover', coverFileRef.current);
+      if (newCoverPath) {
+        formData.set('cover_path', newCoverPath);
       }
 
       const result = await updateStoreSettings(formData);

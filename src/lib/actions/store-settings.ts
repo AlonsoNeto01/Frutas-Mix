@@ -39,8 +39,10 @@ export async function updateStoreSettings(formData: FormData) {
     const store_name = formData.get('store_name') as string;
     const whatsapp_number = formData.get('whatsapp_number') as string;
     const delivery_fee = parseFloat(formData.get('delivery_fee') as string) || 0;
-    const logoFile = formData.get('logo') as File | null;
-    const coverFile = formData.get('cover') as File | null;
+
+    // Os caminhos das imagens já foram enviados diretamente ao Storage pelo cliente
+    const logoPath = formData.get('logo_path') as string | null;
+    const coverPath = formData.get('cover_path') as string | null;
 
     const updateData: Record<string, unknown> = {
       store_name,
@@ -48,44 +50,11 @@ export async function updateStoreSettings(formData: FormData) {
       delivery_fee,
     };
 
-    // Upload do logo se fornecido
-    if (logoFile && logoFile.size > 0) {
-      const ext = logoFile.name ? logoFile.name.split('.').pop() : 'png';
-      const fileName = `logo-${Date.now()}.${ext}`;
-      const fileBuffer = Buffer.from(await logoFile.arrayBuffer());
-
-      const { error: uploadError } = await supabase.storage
-        .from('images')
-        .upload(fileName, fileBuffer, {
-          contentType: logoFile.type || 'image/png',
-          upsert: true,
-        });
-
-      if (uploadError) {
-        return { error: `Erro no upload do logo: ${uploadError.message}` };
-      }
-
-      updateData.logo_url = fileName;
+    if (logoPath) {
+      updateData.logo_url = logoPath;
     }
-
-    // Upload da capa se fornecida
-    if (coverFile && coverFile.size > 0) {
-      const ext = coverFile.name ? coverFile.name.split('.').pop() : 'png';
-      const fileName = `cover-${Date.now()}.${ext}`;
-      const fileBuffer = Buffer.from(await coverFile.arrayBuffer());
-
-      const { error: uploadError } = await supabase.storage
-        .from('images')
-        .upload(fileName, fileBuffer, {
-          contentType: coverFile.type || 'image/jpeg',
-          upsert: true,
-        });
-
-      if (uploadError) {
-        return { error: `Erro no upload da capa: ${uploadError.message}` };
-      }
-
-      updateData.cover_url = fileName;
+    if (coverPath) {
+      updateData.cover_url = coverPath;
     }
 
     const { error } = await supabase
