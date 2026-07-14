@@ -12,10 +12,7 @@ export async function getNeighborhoods() {
     .select('*')
     .order('name');
 
-  console.log('[getNeighborhoods] data:', JSON.stringify(data), 'error:', error);
-
   if (error) {
-    console.error('[getNeighborhoods] Supabase error:', error);
     return { error: error.message, data: null };
   }
 
