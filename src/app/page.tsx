@@ -23,10 +23,10 @@ export default async function Home() {
   return (
     <>
       <Header />
-      
+
       {/* Cover Image */}
       <div className="w-full h-48 md:h-64 lg:h-80 relative bg-neutral-800">
-        <Image 
+        <Image
           src={settingsResult.data?.cover_url ? (getSupabaseImageUrl(settingsResult.data.cover_url) ?? "https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=2000&auto=format&fit=crop") : "https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=2000&auto=format&fit=crop"}
           alt="Capa da Loja"
           fill
@@ -41,7 +41,7 @@ export default async function Home() {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center -mt-16 sm:-mt-20 z-10 mb-8">
         <div className="inline-block p-1 bg-background rounded-full shadow-lg relative w-24 h-24 sm:w-32 sm:h-32">
           {settingsResult.data?.logo_url ? (
-            <img 
+            <img
               src={getSupabaseImageUrl(settingsResult.data.logo_url) || ''}
               alt={storeName}
               className="absolute inset-1 w-[calc(100%-8px)] h-[calc(100%-8px)] rounded-full object-cover border-4 border-background bg-background"
@@ -52,17 +52,16 @@ export default async function Home() {
             </div>
           )}
         </div>
-        
+
         <h1 className="mt-4 text-2xl sm:text-3xl font-bold text-foreground">
           {storeName}
         </h1>
-        
+
         <div className="mt-3 flex items-center justify-center gap-3">
-          <span className={`px-3 py-1 text-xs font-bold rounded-full ${
-            storeStatus.isOpen 
-              ? 'bg-green-500/20 text-green-600 dark:text-green-400' 
+          <span className={`px-3 py-1 text-xs font-bold rounded-full ${storeStatus.isOpen
+              ? 'bg-green-500/20 text-green-600 dark:text-green-400'
               : 'bg-red-500/20 text-red-600 dark:text-red-400'
-          }`}>
+            }`}>
             {storeStatus.isOpen ? 'Aberto' : 'Fechado'}
           </span>
           {storeStatus.message && (
@@ -114,7 +113,7 @@ export default async function Home() {
 
       {/* Footer */}
       <footer className="border-t border-gray-100 dark:border-neutral-800 py-6 text-center text-sm text-gray-400 dark:text-gray-500">
-        © {new Date().getFullYear()} {storeName} · Feito com 🧡
+        © {new Date().getFullYear()} {storeName} | <a href="https://twodevssolutions.com.br/" target="_blank" rel="noopener noreferrer" className="hover:text-green-500 transition-colors font-medium">TwoDevs Solutions</a>
       </footer>
     </>
   );
