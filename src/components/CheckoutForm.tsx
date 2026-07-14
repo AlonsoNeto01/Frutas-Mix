@@ -96,7 +96,13 @@ export default function CheckoutForm({ isStoreOpen, defaultDeliveryFee, whatsapp
         return;
       }
 
+      setOrderId(result.orderId ?? null);
+      if (result.orderId) {
+        localStorage.setItem('frutasmix-active-order', result.orderId);
+      }
+
       // Gerar link WhatsApp se tiver número configurado
+      let generatedUrl = '';
       if (whatsappNumber) {
         const message = buildWhatsAppMessage({
           customerName: formData.name,
@@ -111,16 +117,17 @@ export default function CheckoutForm({ isStoreOpen, defaultDeliveryFee, whatsapp
           deliveryFee,
           total: grandTotal,
         });
-        setWhatsappUrl(getWhatsAppUrl(whatsappNumber, message));
-      }
-
-      setOrderId(result.orderId ?? null);
-      if (result.orderId) {
-        localStorage.setItem('frutasmix-active-order', result.orderId);
+        generatedUrl = getWhatsAppUrl(whatsappNumber, message);
+        setWhatsappUrl(generatedUrl);
       }
       
       clearCart();
       setSuccess(true);
+
+      // Redireciona automaticamente para o WhatsApp
+      if (generatedUrl) {
+        window.open(generatedUrl, '_blank');
+      }
     } catch {
       setError('Erro ao enviar pedido. Tente novamente.');
     } finally {
