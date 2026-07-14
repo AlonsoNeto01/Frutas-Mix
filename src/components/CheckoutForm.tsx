@@ -124,9 +124,9 @@ export default function CheckoutForm({ isStoreOpen, defaultDeliveryFee, whatsapp
       clearCart();
       setSuccess(true);
 
-      // Redireciona automaticamente para o WhatsApp
+      // Redireciona automaticamente para o WhatsApp (usa window.location.href no iOS/Safari para evitar bloqueador de popups)
       if (generatedUrl) {
-        window.open(generatedUrl, '_blank');
+        window.location.href = generatedUrl;
       }
     } catch {
       setError('Erro ao enviar pedido. Tente novamente.');
@@ -144,6 +144,9 @@ export default function CheckoutForm({ isStoreOpen, defaultDeliveryFee, whatsapp
         </h2>
         <p className="mt-2 text-gray-600 dark:text-gray-400">
           Seu pedido foi registrado! Já estamos separando suas frutas! 🍍
+        </p>
+        <p className="mt-4 text-sm text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/20 p-3 rounded-xl max-w-sm mx-auto">
+          ⚠️ Se você não foi redirecionado automaticamente para o WhatsApp, clique no botão verde abaixo para enviar seu pedido manualmente.
         </p>
 
         {whatsappUrl && (
