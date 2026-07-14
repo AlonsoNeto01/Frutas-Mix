@@ -34,7 +34,7 @@ export default async function Home() {
           sizes="100vw"
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent opacity-60" />
+        <div className="absolute inset-0 bg-linear-to-t from-background to-transparent opacity-60" />
       </div>
 
       {/* Store Info Header */}
