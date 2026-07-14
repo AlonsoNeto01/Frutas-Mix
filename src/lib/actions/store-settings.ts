@@ -32,64 +32,77 @@ export const getStoreSettings = cache(async function getStoreSettings() {
 });
 
 export async function updateStoreSettings(formData: FormData) {
-  const supabase = await createClient();
+  try {
+    const supabase = await createClient();
 
-  const id = formData.get('id') as string;
-  const store_name = formData.get('store_name') as string;
-  const whatsapp_number = formData.get('whatsapp_number') as string;
-  const delivery_fee = parseFloat(formData.get('delivery_fee') as string) || 0;
-  const logoFile = formData.get('logo') as File | null;
-  const coverFile = formData.get('cover') as File | null;
+    const id = formData.get('id') as string;
+    const store_name = formData.get('store_name') as string;
+    const whatsapp_number = formData.get('whatsapp_number') as string;
+    const delivery_fee = parseFloat(formData.get('delivery_fee') as string) || 0;
+    const logoFile = formData.get('logo') as File | null;
+    const coverFile = formData.get('cover') as File | null;
 
-  const updateData: Record<string, unknown> = {
-    store_name,
-    whatsapp_number: whatsapp_number || null,
-    delivery_fee,
-  };
+    const updateData: Record<string, unknown> = {
+      store_name,
+      whatsapp_number: whatsapp_number || null,
+      delivery_fee,
+    };
 
-  // Upload do logo se fornecido
-  if (logoFile && logoFile.size > 0) {
-    const ext = logoFile.name.split('.').pop();
-    const fileName = `logo-${Date.now()}.${ext}`;
+    // Upload do logo se fornecido
+    if (logoFile && logoFile.size > 0) {
+      const ext = logoFile.name ? logoFile.name.split('.').pop() : 'png';
+      const fileName = `logo-${Date.now()}.${ext}`;
+      const fileBuffer = Buffer.from(await logoFile.arrayBuffer());
 
-    const { error: uploadError } = await supabase.storage
-      .from('images')
-      .upload(fileName, logoFile, { upsert: true });
+      const { error: uploadError } = await supabase.storage
+        .from('images')
+        .upload(fileName, fileBuffer, {
+          contentType: logoFile.type || 'image/png',
+          upsert: true,
+        });
 
-    if (uploadError) {
-      return { error: `Erro no upload do logo: ${uploadError.message}` };
+      if (uploadError) {
+        return { error: `Erro no upload do logo: ${uploadError.message}` };
+      }
+
+      updateData.logo_url = fileName;
     }
 
-    updateData.logo_url = fileName;
-  }
+    // Upload da capa se fornecida
+    if (coverFile && coverFile.size > 0) {
+      const ext = coverFile.name ? coverFile.name.split('.').pop() : 'png';
+      const fileName = `cover-${Date.now()}.${ext}`;
+      const fileBuffer = Buffer.from(await coverFile.arrayBuffer());
 
-  // Upload da capa se fornecida
-  if (coverFile && coverFile.size > 0) {
-    const ext = coverFile.name.split('.').pop();
-    const fileName = `cover-${Date.now()}.${ext}`;
+      const { error: uploadError } = await supabase.storage
+        .from('images')
+        .upload(fileName, fileBuffer, {
+          contentType: coverFile.type || 'image/jpeg',
+          upsert: true,
+        });
 
-    const { error: uploadError } = await supabase.storage
-      .from('images')
-      .upload(fileName, coverFile, { upsert: true });
+      if (uploadError) {
+        return { error: `Erro no upload da capa: ${uploadError.message}` };
+      }
 
-    if (uploadError) {
-      return { error: `Erro no upload da capa: ${uploadError.message}` };
+      updateData.cover_url = fileName;
     }
 
-    updateData.cover_url = fileName;
+    const { error } = await supabase
+      .from('store_settings')
+      .update(updateData)
+      .eq('id', id);
+
+    if (error) {
+      return { error: error.message };
+    }
+
+    revalidatePath('/', 'layout');
+    revalidatePath('/checkout');
+    revalidatePath('/admin');
+    return { success: true };
+  } catch (error: any) {
+    console.error('Error in updateStoreSettings:', error);
+    return { error: error.message || 'Ocorreu um erro interno ao salvar.' };
   }
-
-  const { error } = await supabase
-    .from('store_settings')
-    .update(updateData)
-    .eq('id', id);
-
-  if (error) {
-    return { error: error.message };
-  }
-
-  revalidatePath('/', 'layout');
-  revalidatePath('/checkout');
-  revalidatePath('/admin');
-  return { success: true };
 }

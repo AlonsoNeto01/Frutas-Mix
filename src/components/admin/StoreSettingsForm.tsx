@@ -47,31 +47,36 @@ export default function StoreSettingsForm({ initialSettings }: StoreSettingsForm
     setLoading(true);
     setMessage('');
 
-    const formData = new FormData();
-    formData.set('id', settings.id);
-    formData.set('store_name', settings.store_name);
-    formData.set('whatsapp_number', settings.whatsapp_number || '');
-    formData.set('delivery_fee', String(settings.delivery_fee));
+    try {
+      const formData = new FormData();
+      formData.set('id', settings.id);
+      formData.set('store_name', settings.store_name);
+      formData.set('whatsapp_number', settings.whatsapp_number || '');
+      formData.set('delivery_fee', String(settings.delivery_fee));
 
-    if (logoFileRef.current) {
-      formData.set('logo', logoFileRef.current);
+      if (logoFileRef.current) {
+        formData.set('logo', logoFileRef.current);
+      }
+      if (coverFileRef.current) {
+        formData.set('cover', coverFileRef.current);
+      }
+
+      const result = await updateStoreSettings(formData);
+
+      if (result.error) {
+        setMessage(`Erro: ${result.error}`);
+      } else {
+        setMessage('Configurações salvas! Recarregue a página para ver as mudanças. ✅');
+        logoFileRef.current = null;
+        coverFileRef.current = null;
+      }
+    } catch (err: any) {
+      console.error(err);
+      setMessage(`Erro: ${err.message || 'Erro de conexão ou servidor'}`);
+    } finally {
+      setLoading(false);
+      setTimeout(() => setMessage(''), 5000);
     }
-    if (coverFileRef.current) {
-      formData.set('cover', coverFileRef.current);
-    }
-
-    const result = await updateStoreSettings(formData);
-
-    if (result.error) {
-      setMessage(`Erro: ${result.error}`);
-    } else {
-      setMessage('Configurações salvas! Recarregue a página para ver as mudanças. ✅');
-      logoFileRef.current = null;
-      coverFileRef.current = null;
-    }
-
-    setLoading(false);
-    setTimeout(() => setMessage(''), 5000);
   };
 
   const currentLogoUrl = logoPreview || (settings.logo_url ? getSupabaseImageUrl(settings.logo_url) : null);

@@ -8,17 +8,29 @@ import { StoreProvider } from '@/contexts/StoreContext';
 import { getStoreSettings } from '@/lib/actions/store-settings';
 import type { StoreSettings } from '@/lib/types';
 import ActiveOrderBanner from '@/components/ActiveOrderBanner';
+import { getSupabaseImageUrl } from '@/lib/utils';
 
 const inter = Inter({
   variable: '--font-inter',
   subsets: ['latin'],
 });
 
-export const metadata: Metadata = {
-  title: 'Frutas Mix — Delivery de Frutas Cortadas',
-  description: 'Peça seu copo tropical com frutas frescas cortadas, sucos naturais e pudim. Delivery rápido e prático. Frutas Mix!',
-  keywords: ['frutas', 'delivery', 'frutas cortadas', 'copo tropical', 'suco natural', 'abacaxi', 'manga', 'melancia', 'pudim'],
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const settingsResult = await getStoreSettings();
+  const settings = settingsResult.data as StoreSettings | null;
+  const logoUrl = getSupabaseImageUrl(settings?.logo_url) || '/favicon.ico';
+
+  return {
+    title: 'Frutas Mix — Delivery de Frutas Cortadas',
+    description: 'Peça seu copo tropical com frutas frescas cortadas, sucos naturais e pudim. Delivery rápido e prático. Frutas Mix!',
+    keywords: ['frutas', 'delivery', 'frutas cortadas', 'copo tropical', 'suco natural', 'abacaxi', 'manga', 'melancia', 'pudim'],
+    icons: {
+      icon: logoUrl,
+      shortcut: logoUrl,
+      apple: logoUrl,
+    },
+  };
+}
 
 export default async function RootLayout({
   children,
