@@ -279,6 +279,8 @@ export default function CheckoutForm({ isStoreOpen, defaultDeliveryFee, whatsapp
           <label htmlFor="neighborhood" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
             Bairro (Taxa de Entrega)
           </label>
+          {/* DEBUG TEMP - remover depois */}
+          <p className="text-xs text-orange-500">DEBUG: {neighborhoods.length} bairros recebidos, {neighborhoods.filter(n => n.is_active).length} ativos</p>
           <select
             id="neighborhood"
             value={formData.neighborhood_id}

@@ -12,11 +12,14 @@ export async function getNeighborhoods() {
     .select('*')
     .order('name');
 
+  console.log('[getNeighborhoods] data:', JSON.stringify(data), 'error:', error);
+
   if (error) {
+    console.error('[getNeighborhoods] Supabase error:', error);
     return { error: error.message, data: null };
   }
 
-  return { data, error: null };
+  return { data: data ?? [], error: null };
 }
 
 export async function updateNeighborhoodStatus(id: string, is_active: boolean) {
