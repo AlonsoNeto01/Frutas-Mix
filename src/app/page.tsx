@@ -47,7 +47,7 @@ export default async function Home() {
               className="absolute inset-1 w-[calc(100%-8px)] h-[calc(100%-8px)] rounded-full object-cover border-4 border-background bg-background"
             />
           ) : (
-            <div className="absolute inset-1 w-[calc(100%-8px)] h-[calc(100%-8px)] rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center border-4 border-background shadow-inner">
+            <div className="absolute inset-1 w-[calc(100%-8px)] h-[calc(100%-8px)] rounded-full bg-linear-to-br from-green-400 to-green-600 flex items-center justify-center border-4 border-background shadow-inner">
               <span className="text-white text-3xl sm:text-4xl font-bold">🍉</span>
             </div>
           )}
