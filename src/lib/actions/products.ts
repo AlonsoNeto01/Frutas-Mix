@@ -36,6 +36,7 @@ export async function createProduct(formData: FormData) {
   const price = parseFloat(formData.get('price') as string);
   const category_id = formData.get('category_id') as string;
   const is_highlight = formData.get('is_highlight') === 'true';
+  const has_free_shipping = formData.get('has_free_shipping') === 'true';
   const imageFile = formData.get('image') as File | null;
 
   let image_url: string | null = null;
@@ -62,6 +63,7 @@ export async function createProduct(formData: FormData) {
     price,
     category_id: category_id || null,
     is_highlight,
+    has_free_shipping,
     image_url,
   });
 
@@ -81,6 +83,7 @@ export async function updateProduct(productId: string, formData: FormData) {
   const category_id = formData.get('category_id') as string;
   const is_highlight = formData.get('is_highlight') === 'true';
   const is_active = formData.get('is_active') === 'true';
+  const has_free_shipping = formData.get('has_free_shipping') === 'true';
   const imageFile = formData.get('image') as File | null;
 
   const updateData: Record<string, unknown> = {
@@ -90,6 +93,7 @@ export async function updateProduct(productId: string, formData: FormData) {
     category_id: category_id || null,
     is_highlight,
     is_active,
+    has_free_shipping,
   };
 
   // Upload nova imagem se fornecida

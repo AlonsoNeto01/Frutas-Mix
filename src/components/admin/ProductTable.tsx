@@ -149,6 +149,11 @@ export default function ProductTable({ initialProducts, initialCategories }: Pro
                       <p className="font-semibold text-gray-900 dark:text-gray-100">
                         {product.name}
                         {product.is_highlight && <span className="ml-1">⭐</span>}
+                        {product.has_free_shipping && (
+                          <span className="ml-1.5 inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-green-100 text-green-700 dark:bg-green-500/10 dark:text-green-400">
+                            🚚 Frete Grátis
+                          </span>
+                        )}
                       </p>
                     </td>
                     <td className="py-3 px-2 text-gray-700 dark:text-gray-300">

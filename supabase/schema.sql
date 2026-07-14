@@ -20,6 +20,7 @@ CREATE TABLE products (
   category_id UUID REFERENCES categories(id) ON DELETE SET NULL,
   is_highlight BOOLEAN DEFAULT false,
   is_active BOOLEAN DEFAULT true,
+  has_free_shipping BOOLEAN DEFAULT false,
   created_at TIMESTAMPTZ DEFAULT now()
 );
 

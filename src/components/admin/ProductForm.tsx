@@ -138,6 +138,20 @@ export default function ProductForm({ product, categories, onSuccess, onCancel }
         </span>
       </label>
 
+      {/* Free Shipping Toggle */}
+      <label className="flex items-center gap-3 cursor-pointer">
+        <input
+          type="checkbox"
+          name="has_free_shipping"
+          value="true"
+          defaultChecked={product?.has_free_shipping || false}
+          className="w-4 h-4 rounded border-gray-300 text-green-500 focus:ring-green-500"
+        />
+        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+          🚚 Frete grátis neste produto
+        </span>
+      </label>
+
       {product && (
         <label className="flex items-center gap-3 cursor-pointer">
           <input

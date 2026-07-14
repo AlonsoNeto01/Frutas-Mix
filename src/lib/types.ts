@@ -21,6 +21,7 @@ export interface Product {
   category_id: string | null;
   is_highlight: boolean;
   is_active: boolean;
+  has_free_shipping: boolean;
   created_at: string;
 }
 

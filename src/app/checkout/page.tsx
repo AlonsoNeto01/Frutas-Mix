@@ -5,6 +5,8 @@ import Header from '@/components/Header';
 import CheckoutForm from '@/components/CheckoutForm';
 import type { Metadata } from 'next';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'Checkout — Frutas Mix',
   description: 'Finalize seu pedido no Frutas Mix',

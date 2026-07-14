@@ -58,6 +58,11 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
           <span className="text-sm font-bold text-gray-900 dark:text-gray-100">
             {formatCurrency(product.price)}
           </span>
+          {product.has_free_shipping && (
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-green-100 text-green-700 dark:bg-green-500/15 dark:text-green-400">
+              🚚 Frete Grátis
+            </span>
+          )}
         </div>
       </div>
     </button>

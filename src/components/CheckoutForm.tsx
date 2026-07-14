@@ -43,7 +43,9 @@ export default function CheckoutForm({ isStoreOpen, defaultDeliveryFee, whatsapp
   }, []);
 
   const selectedNeighborhood = neighborhoods.find(n => n.id === formData.neighborhood_id);
-  const deliveryFee = selectedNeighborhood ? Number(selectedNeighborhood.fee) : Number(defaultDeliveryFee);
+  const allItemsFreeShipping = items.length > 0 && items.every(item => item.product.has_free_shipping);
+  const baseDeliveryFee = selectedNeighborhood ? Number(selectedNeighborhood.fee) : Number(defaultDeliveryFee);
+  const deliveryFee = allItemsFreeShipping ? 0 : baseDeliveryFee;
   const grandTotal = subtotal + deliveryFee;
 
   const handleChange = (field: string, value: string) => {
@@ -237,6 +239,13 @@ export default function CheckoutForm({ isStoreOpen, defaultDeliveryFee, whatsapp
               {deliveryFee > 0 ? formatCurrency(deliveryFee) : 'Grátis'}
             </span>
           </div>
+          {allItemsFreeShipping && (
+            <div className="flex items-center gap-2 px-3 py-2 bg-green-50 dark:bg-green-500/10 border border-green-200 dark:border-green-500/20 rounded-xl">
+              <span className="text-green-600 dark:text-green-400 text-sm font-semibold">
+                🎉 Frete grátis aplicado! Todos os itens possuem frete grátis.
+              </span>
+            </div>
+          )}
           <div className="flex justify-between items-center pt-2 border-t border-gray-100 dark:border-neutral-800">
             <span className="font-bold text-gray-900 dark:text-gray-100">Total</span>
             <span className="text-xl font-bold text-green-600 dark:text-green-400">

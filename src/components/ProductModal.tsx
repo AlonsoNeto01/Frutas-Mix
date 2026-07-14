@@ -125,6 +125,11 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
       <p className="mt-3 text-2xl font-bold text-green-600 dark:text-green-400">
         {formatCurrency(product.price)}
       </p>
+      {product.has_free_shipping && (
+        <span className="inline-flex items-center gap-1 mt-2 px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 dark:bg-green-500/15 dark:text-green-400">
+          🚚 Frete Grátis
+        </span>
+      )}
 
       {/* Observation */}
       <div className="mt-5">
