@@ -18,7 +18,7 @@ const inter = Inter({
 export async function generateMetadata(): Promise<Metadata> {
   const settingsResult = await getStoreSettings();
   const settings = settingsResult.data as StoreSettings | null;
-  const logoUrl = getSupabaseImageUrl(settings?.logo_url) || '/favicon.ico';
+  const logoUrl = getSupabaseImageUrl(settings?.logo_url ?? null) || '/favicon.ico';
 
   return {
     title: 'Frutas Mix — Delivery de Frutas Cortadas',
