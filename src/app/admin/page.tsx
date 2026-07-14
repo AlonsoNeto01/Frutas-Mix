@@ -7,6 +7,8 @@ import { getNeighborhoods } from '@/lib/actions/neighborhoods';
 import AdminPageClient from './AdminPageClient';
 import type { Order, Product, Category, BusinessHours, StoreSettings, DeliveryNeighborhood } from '@/lib/types';
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminPage() {
   const [ordersResult, productsResult, categoriesResult, hoursResult, settingsResult, neighborhoodsResult] = await Promise.all([
     getOrders(),
