@@ -23,6 +23,7 @@ export const getStoreSettings = cache(async function getStoreSettings() {
         logo_url: null,
         cover_url: null,
         delivery_fee: 0,
+        order_tracking_mode: 'tracking' as const,
         created_at: '',
       },
     };
@@ -39,6 +40,7 @@ export async function updateStoreSettings(formData: FormData) {
     const store_name = formData.get('store_name') as string;
     const whatsapp_number = formData.get('whatsapp_number') as string;
     const delivery_fee = parseFloat(formData.get('delivery_fee') as string) || 0;
+    const order_tracking_mode = (formData.get('order_tracking_mode') as string) || 'tracking';
 
     // Os caminhos das imagens já foram enviados diretamente ao Storage pelo cliente
     const logoPath = formData.get('logo_path') as string | null;
@@ -48,6 +50,7 @@ export async function updateStoreSettings(formData: FormData) {
       store_name,
       whatsapp_number: whatsapp_number || null,
       delivery_fee,
+      order_tracking_mode,
     };
 
     if (logoPath) {

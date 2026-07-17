@@ -50,3 +50,38 @@ export async function updateNeighborhoodFee(id: string, fee: number) {
   revalidatePath('/admin');
   return { success: true };
 }
+
+export async function addNeighborhood(name: string, fee: number) {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from('delivery_neighborhoods')
+    .insert({ name, fee, is_active: true })
+    .select()
+    .single();
+
+  if (error) {
+    return { error: error.message, data: null };
+  }
+
+  revalidatePath('/admin');
+  revalidatePath('/checkout');
+  return { data, error: null };
+}
+
+export async function deleteNeighborhood(id: string) {
+  const supabase = await createClient();
+
+  const { error } = await supabase
+    .from('delivery_neighborhoods')
+    .delete()
+    .eq('id', id);
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  revalidatePath('/admin');
+  revalidatePath('/checkout');
+  return { success: true };
+}

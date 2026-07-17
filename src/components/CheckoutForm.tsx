@@ -16,9 +16,10 @@ interface CheckoutFormProps {
   defaultDeliveryFee: number;
   whatsappNumber: string | null;
   neighborhoods: DeliveryNeighborhood[];
+  orderTrackingMode: 'tracking' | 'whatsapp_only';
 }
 
-export default function CheckoutForm({ isStoreOpen, defaultDeliveryFee, whatsappNumber, neighborhoods }: CheckoutFormProps) {
+export default function CheckoutForm({ isStoreOpen, defaultDeliveryFee, whatsappNumber, neighborhoods, orderTrackingMode }: CheckoutFormProps) {
   const { items, total: subtotal, clearCart } = useCart();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -97,7 +98,7 @@ export default function CheckoutForm({ isStoreOpen, defaultDeliveryFee, whatsapp
       }
 
       setOrderId(result.orderId ?? null);
-      if (result.orderId) {
+      if (result.orderId && orderTrackingMode === 'tracking') {
         localStorage.setItem('frutasmix-active-order', result.orderId);
       }
 
@@ -164,7 +165,7 @@ export default function CheckoutForm({ isStoreOpen, defaultDeliveryFee, whatsapp
           </a>
         )}
 
-        {orderId && (
+        {orderId && orderTrackingMode === 'tracking' && (
           <Button
             onClick={() => router.push(`/order/${orderId}`)}
             className="w-full max-w-sm mx-auto mt-4"

@@ -34,6 +34,7 @@ export default async function CheckoutPage() {
           defaultDeliveryFee={settings.delivery_fee ?? 0}
           whatsappNumber={settings.whatsapp_number ?? null}
           neighborhoods={neighborhoods}
+          orderTrackingMode={settings.order_tracking_mode ?? 'tracking'}
         />
       </main>
     </>

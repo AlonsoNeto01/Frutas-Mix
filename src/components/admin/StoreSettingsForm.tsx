@@ -89,6 +89,7 @@ export default function StoreSettingsForm({ initialSettings }: StoreSettingsForm
       formData.set('store_name', settings.store_name);
       formData.set('whatsapp_number', settings.whatsapp_number || '');
       formData.set('delivery_fee', String(settings.delivery_fee));
+      formData.set('order_tracking_mode', settings.order_tracking_mode || 'tracking');
 
       if (newLogoPath) {
         formData.set('logo_path', newLogoPath);
@@ -247,6 +248,83 @@ export default function StoreSettingsForm({ initialSettings }: StoreSettingsForm
           <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
             Defina 0 para entrega grátis.
           </p>
+        </div>
+
+        {/* Modo de acompanhamento do pedido */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+            Acompanhamento do Pedido
+          </label>
+          <p className="text-xs text-gray-400 dark:text-gray-500 mb-3">
+            Escolha como o cliente acompanha o status do pedido após finalizar.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <button
+              type="button"
+              onClick={() => handleChange('order_tracking_mode', 'tracking')}
+              className={`relative flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all duration-200 ${
+                settings.order_tracking_mode === 'tracking'
+                  ? 'border-orange-500 bg-orange-50 dark:bg-orange-500/10 shadow-sm shadow-orange-500/10'
+                  : 'border-gray-200 dark:border-neutral-700 hover:border-gray-300 dark:hover:border-neutral-600'
+              }`}
+            >
+              {settings.order_tracking_mode === 'tracking' && (
+                <span className="absolute top-2 right-2 w-5 h-5 bg-orange-500 rounded-full flex items-center justify-center">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                </span>
+              )}
+              <span className="text-2xl">📍</span>
+              <span className={`text-sm font-semibold ${
+                settings.order_tracking_mode === 'tracking'
+                  ? 'text-orange-700 dark:text-orange-400'
+                  : 'text-gray-600 dark:text-gray-400'
+              }`}>
+                Acompanhar na Loja
+              </span>
+              <span className={`text-xs text-center ${
+                settings.order_tracking_mode === 'tracking'
+                  ? 'text-orange-600/70 dark:text-orange-400/70'
+                  : 'text-gray-400 dark:text-gray-500'
+              }`}>
+                Cliente vê o status em tempo real no site
+              </span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleChange('order_tracking_mode', 'whatsapp_only')}
+              className={`relative flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all duration-200 ${
+                settings.order_tracking_mode === 'whatsapp_only'
+                  ? 'border-green-500 bg-green-50 dark:bg-green-500/10 shadow-sm shadow-green-500/10'
+                  : 'border-gray-200 dark:border-neutral-700 hover:border-gray-300 dark:hover:border-neutral-600'
+              }`}
+            >
+              {settings.order_tracking_mode === 'whatsapp_only' && (
+                <span className="absolute top-2 right-2 w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                </span>
+              )}
+              <span className="text-2xl">💬</span>
+              <span className={`text-sm font-semibold ${
+                settings.order_tracking_mode === 'whatsapp_only'
+                  ? 'text-green-700 dark:text-green-400'
+                  : 'text-gray-600 dark:text-gray-400'
+              }`}>
+                Apenas WhatsApp
+              </span>
+              <span className={`text-xs text-center ${
+                settings.order_tracking_mode === 'whatsapp_only'
+                  ? 'text-green-600/70 dark:text-green-400/70'
+                  : 'text-gray-400 dark:text-gray-500'
+              }`}>
+                Cliente acompanha somente pelo WhatsApp
+              </span>
+            </button>
+          </div>
         </div>
       </div>
 

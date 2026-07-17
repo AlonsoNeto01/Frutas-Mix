@@ -69,6 +69,7 @@ CREATE TABLE store_settings (
   logo_url TEXT,
   cover_url TEXT,
   delivery_fee NUMERIC(10,2) DEFAULT 0,
+  order_tracking_mode TEXT NOT NULL DEFAULT 'tracking' CHECK (order_tracking_mode IN ('tracking', 'whatsapp_only')),
   created_at TIMESTAMPTZ DEFAULT now()
 );
 

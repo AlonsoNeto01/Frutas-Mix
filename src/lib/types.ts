@@ -109,6 +109,7 @@ export interface StoreSettings {
   logo_url: string | null;
   cover_url: string | null;
   delivery_fee: number;
+  order_tracking_mode: 'tracking' | 'whatsapp_only';
   created_at: string;
 }
 
